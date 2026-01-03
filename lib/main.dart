@@ -1,4 +1,15 @@
+import 'package:art_studio_app/screens/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+var kColorScheme = ColorScheme.fromSeed(
+  seedColor: const Color.fromARGB(255, 181, 50, 40),
+);
+
+var kDarkColorScheme = ColorScheme.fromSeed(
+  seedColor: const Color.fromARGB(255, 114, 31, 25),
+  brightness: .dark,
+);
 
 void main() {
   runApp(const MyApp());
@@ -9,14 +20,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Art Studio',
+      darkTheme: ThemeData(
+        textTheme: GoogleFonts.nunitoTextTheme(),
+        colorScheme: kColorScheme,
+      ),
       theme: ThemeData(
-        colorScheme: .fromSeed(
-          seedColor: const Color.fromARGB(255, 181, 50, 40),
-        ),
+        textTheme: GoogleFonts.nunitoTextTheme(),
+        colorScheme: kColorScheme,
       ),
 
-      home: Center(),
+      home: WelcomeScreen(),
     );
   }
 }
