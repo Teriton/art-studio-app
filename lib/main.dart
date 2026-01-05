@@ -22,10 +22,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Art Studio',
-      darkTheme: ThemeData(
-        textTheme: GoogleFonts.nunitoTextTheme(),
-        colorScheme: kColorScheme,
-      ),
       theme: ThemeData(
         textTheme: GoogleFonts.nunitoTextTheme(),
         colorScheme: kColorScheme,

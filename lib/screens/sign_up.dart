@@ -1,16 +1,17 @@
-import 'package:art_studio_app/widgets/login.dart';
+import 'package:art_studio_app/widgets/signup/contacts_enter.dart';
+import 'package:art_studio_app/widgets/signup/name_enter.dart';
 import 'package:art_studio_app/widgets/page_indicator.dart';
-import 'package:art_studio_app/widgets/welcome_card.dart';
+import 'package:art_studio_app/widgets/signup/password_enter.dart';
 import 'package:flutter/material.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<WelcomeScreen> createState() => _WelcomeScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen>
+class _SignUpScreenState extends State<SignUpScreen>
     with TickerProviderStateMixin {
   late PageController _pageViewController;
   late TabController _tabController;
@@ -20,7 +21,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
     _pageViewController = PageController();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -52,7 +53,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       decoration: BoxDecoration(
         color: Colors.black,
         image: DecorationImage(
-          image: AssetImage('assets/images/bg2.jpg'),
+          image: AssetImage('assets/images/bg1.jpg'),
           opacity: 0.8,
           fit: .cover,
         ),
@@ -62,17 +63,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           toolbarHeight: 10,
           backgroundColor: Colors.transparent,
           systemOverlayStyle: .light,
-          elevation: 0, // убираем тень
+          elevation: 0,
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Theme.of(
-                    context,
-                  ).colorScheme.onPrimary, // Непрозрачный цвет сверху
-                  Colors.transparent, // Прозрачный снизу
+                  Theme.of(context).colorScheme.onPrimary,
+                  Colors.transparent,
                 ],
                 stops: [0.0, 1.0],
               ),
@@ -101,14 +100,26 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               controller: _pageViewController,
               onPageChanged: _handlePageViewChanged,
               children: [
-                WelcomeCard(
-                  onNextButton: () {
+                NameEnter(
+                  onBackButtonClick: () {
+                    Navigator.of(context).pop();
+                  },
+                  onNextButtonClick: () {
                     _updateCurrentPageIndex(1);
                   },
                 ),
-                Login(
+                ContactsEnter(
                   onBackButtonClick: () {
                     _updateCurrentPageIndex(0);
+                  },
+                  onNextButtonClick: () {
+                    _updateCurrentPageIndex(2);
+                  },
+                ),
+                PasswordEnter(
+                  onSignUpButtonClick: () {},
+                  onBackButtonClick: () {
+                    _updateCurrentPageIndex(1);
                   },
                 ),
               ],

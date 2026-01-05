@@ -1,7 +1,13 @@
+import 'package:art_studio_app/screens/sign_up.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key, required this.onBackButtonClick});
+
+  static const textFields = {
+    "errorLogin": "Введите логин больше 3 символов",
+    "errorPassword": "Пароль должен быть длинее 6 символов",
+  };
 
   final void Function() onBackButtonClick;
 
@@ -17,6 +23,8 @@ class _LoginState extends State<Login> {
   void _saveItem() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      print(_enteredLogin);
+      print(_enteredPassword);
     }
   }
 
@@ -48,6 +56,7 @@ class _LoginState extends State<Login> {
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
+                    textInputAction: .next,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -57,9 +66,9 @@ class _LoginState extends State<Login> {
                     validator: (value) {
                       if (value == null ||
                           value.isEmpty ||
-                          value.trim().length <= 4 ||
+                          value.trim().length <= 3 ||
                           value.trim().length > 50) {
-                        return "Введите логин больше 4 символов";
+                        return Login.textFields["errorLogin"];
                       }
                       return null;
                     },
@@ -72,7 +81,7 @@ class _LoginState extends State<Login> {
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.trim().length < 6) {
-                        return "Пароль должен быть длинее 6 символов";
+                        return Login.textFields["errorPassword"];
                       }
                       return null;
                     },
@@ -84,7 +93,7 @@ class _LoginState extends State<Login> {
                   Column(
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: _saveItem,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(
                             context,
@@ -93,7 +102,15 @@ class _LoginState extends State<Login> {
                         child: Text("Войти"),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (ctx) {
+                                return const SignUpScreen();
+                              },
+                            ),
+                          );
+                        },
                         child: Text("У меня нету аккаунта"),
                       ),
                     ],
