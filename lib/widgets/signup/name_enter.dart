@@ -39,6 +39,7 @@ class _NameEnterState extends State<NameEnter> {
       print(_enteredName);
       print(_enteredLastName);
       print(_enteredLogin);
+      FocusScope.of(context).unfocus();
       widget.onNextButtonClick();
     }
   }

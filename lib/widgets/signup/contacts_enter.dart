@@ -31,6 +31,7 @@ class _ContactsEnterState extends State<ContactsEnter> {
       _formKey.currentState!.save();
       print(_enteredPhone);
       print(_enteredEmail);
+      FocusScope.of(context).unfocus();
       widget.onNextButtonClick();
     }
   }

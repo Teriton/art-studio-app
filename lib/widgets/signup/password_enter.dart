@@ -32,6 +32,7 @@ class _PasswordEnterState extends State<PasswordEnter> {
       _formKey.currentState!.save();
       print(_enteredPassword);
       print(_enteredRepeatPassword);
+      FocusScope.of(context).unfocus();
       widget.onSignUpButtonClick();
     }
   }
@@ -56,7 +57,7 @@ class _PasswordEnterState extends State<PasswordEnter> {
               decoration: InputDecoration(
                 label: Text(PasswordEnter.textFields["password"]!),
               ),
-              keyboardType: TextInputType.phone,
+              keyboardType: TextInputType.visiblePassword,
               enableSuggestions: false,
               onChanged: (value) {
                 _enteredPassword = value;
@@ -77,7 +78,7 @@ class _PasswordEnterState extends State<PasswordEnter> {
               decoration: InputDecoration(
                 label: Text(PasswordEnter.textFields["repeatPassword"]!),
               ),
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.visiblePassword,
               enableSuggestions: false,
               validator: (value) {
                 if (value == null ||
