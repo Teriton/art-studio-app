@@ -1,3 +1,4 @@
+import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/screens/welcome.dart';
 import 'package:art_studio_app/widgets/login.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,9 @@ void main() {
 
     testWidgets("Verification login fields test ", (tester) async {
       await tester.pumpWidget(
-        MaterialApp(home: Login(onBackButtonClick: () {})),
+        MaterialApp(
+          home: Login(onBackButtonClick: () {}, onLoginButtonClick: () {}),
+        ),
       );
 
       final login = find.widgetWithText(TextFormField, "Логин");
@@ -55,6 +58,29 @@ void main() {
       await tester.pumpAndSettle();
       expect(loginErrorText, findsNothing);
       expect(passwordErrorText, findsNothing);
+    });
+    testWidgets("Go to general test ", (tester) async {
+      await tester.pumpWidget(MaterialApp(home: WelcomeScreen()));
+      final nextButton = find.widgetWithText(ElevatedButton, "Далее");
+      expect(nextButton, findsOneWidget);
+      await tester.tap(nextButton);
+      await tester.pumpAndSettle();
+
+      final login = find.widgetWithText(TextFormField, "Логин");
+      expect(login, findsOneWidget);
+      final password = find.widgetWithText(TextFormField, "Пароль");
+      expect(password, findsOneWidget);
+      final signinButton = find.widgetWithText(ElevatedButton, "Войти");
+      expect(signinButton, findsOneWidget);
+
+      await tester.enterText(login, "username");
+      await tester.enterText(password, "password");
+      await tester.tap(signinButton);
+      await tester.pumpAndSettle();
+
+      final appBarGeneral = find.text(GeneralScreen.textFields["appBarTitle"]!);
+      expect(appBarGeneral, findsOne);
+      expect(find.byIcon(Icons.arrow_back), findsNothing);
     });
   });
 }

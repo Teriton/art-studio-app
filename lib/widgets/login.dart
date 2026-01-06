@@ -2,7 +2,11 @@ import 'package:art_studio_app/screens/sign_up.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key, required this.onBackButtonClick});
+  const Login({
+    super.key,
+    required this.onBackButtonClick,
+    required this.onLoginButtonClick,
+  });
 
   static const textFields = {
     "errorLogin": "Введите логин больше 3 символов",
@@ -10,6 +14,7 @@ class Login extends StatefulWidget {
   };
 
   final void Function() onBackButtonClick;
+  final void Function() onLoginButtonClick;
 
   @override
   State<Login> createState() => _LoginState();
@@ -25,6 +30,7 @@ class _LoginState extends State<Login> {
       _formKey.currentState!.save();
       print(_enteredLogin);
       print(_enteredPassword);
+      widget.onLoginButtonClick();
     }
   }
 

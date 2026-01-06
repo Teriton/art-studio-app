@@ -1,3 +1,4 @@
+import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/widgets/login.dart';
 import 'package:art_studio_app/widgets/page_indicator.dart';
 import 'package:art_studio_app/widgets/welcome_card.dart';
@@ -109,6 +110,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Login(
                   onBackButtonClick: () {
                     _updateCurrentPageIndex(0);
+                  },
+                  onLoginButtonClick: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (ctx) {
+                          return const GeneralScreen();
+                        },
+                      ),
+                    );
                   },
                 ),
               ],

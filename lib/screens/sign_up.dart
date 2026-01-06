@@ -1,3 +1,4 @@
+import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/widgets/signup/contacts_enter.dart';
 import 'package:art_studio_app/widgets/signup/name_enter.dart';
 import 'package:art_studio_app/widgets/page_indicator.dart';
@@ -117,7 +118,15 @@ class _SignUpScreenState extends State<SignUpScreen>
                   },
                 ),
                 PasswordEnter(
-                  onSignUpButtonClick: () {},
+                  onSignUpButtonClick: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) {
+                          return const GeneralScreen();
+                        },
+                      ),
+                    );
+                  },
                   onBackButtonClick: () {
                     _updateCurrentPageIndex(1);
                   },
