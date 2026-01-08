@@ -39,5 +39,6 @@ class Master extends MasterAdd {
     required super.image,
   });
   factory Master.fromJson(Map<String, dynamic> json) => _$MasterFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$MasterToJson(this);
 }

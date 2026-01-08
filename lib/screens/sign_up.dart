@@ -1,3 +1,4 @@
+import 'package:art_studio_app/objects/workshop_api_repository.dart';
 import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/widgets/signup/contacts_enter.dart';
 import 'package:art_studio_app/widgets/signup/name_enter.dart';
@@ -122,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-                          return const GeneralScreen();
+                          return GeneralScreen();
                         },
                       ),
                     );

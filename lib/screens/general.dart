@@ -1,8 +1,13 @@
+import 'package:art_studio_app/models/workshop.dart';
+import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
+import 'package:art_studio_app/screens/welcome.dart';
 import 'package:art_studio_app/widgets/general/workshop_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GeneralScreen extends StatefulWidget {
+class GeneralScreen extends ConsumerStatefulWidget {
   const GeneralScreen({super.key});
+
   static final textFields = {
     "workshops": "Мастерклассы",
     "profile": "Профиль",
@@ -10,11 +15,20 @@ class GeneralScreen extends StatefulWidget {
   };
 
   @override
-  State<GeneralScreen> createState() => _GeneralScreenState();
+  ConsumerState<GeneralScreen> createState() => _GeneralScreenState();
 }
 
-class _GeneralScreenState extends State<GeneralScreen> {
+class _GeneralScreenState extends ConsumerState<GeneralScreen> {
   int _selectedPageIndex = 0;
+  List<WorkshopRel>? _workshops;
+
+  void _initWorkshops() async {
+    final repo = await ref.read(workshopRepositoryProvider.future);
+    final freshWorkshops = await repo.getWorkshops();
+    setState(() {
+      _workshops = freshWorkshops;
+    });
+  }
 
   void _selectPage(int index) {
     setState(() {
@@ -28,20 +42,42 @@ class _GeneralScreenState extends State<GeneralScreen> {
     String activePageTitle = '';
     switch (_selectedPageIndex) {
       case 0:
-        content = WorkshopList();
+        if (_workshops == null) {
+          content = Center(child: CircularProgressIndicator());
+          _initWorkshops();
+          break;
+        }
+        content = WorkshopList(workshops: _workshops!);
         activePageTitle = GeneralScreen.textFields["workshops"]!;
         break;
       case 1:
-        content = WorkshopList();
+        //content = Center(child: CircularProgressIndicator());
         activePageTitle = GeneralScreen.textFields["orders"]!;
         break;
       case 2:
-        content = WorkshopList();
+        //content = Center(child: CircularProgressIndicator());
         activePageTitle = GeneralScreen.textFields["profile"]!;
         break;
     }
     return Scaffold(
-      appBar: AppBar(title: Text(activePageTitle)),
+      appBar: AppBar(
+        title: Text(activePageTitle),
+        actions: [
+          if (_selectedPageIndex == 2)
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const WelcomeScreen();
+                    },
+                  ),
+                );
+              },
+              icon: Icon(Icons.logout),
+            ),
+        ],
+      ),
       body: content,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedPageIndex,

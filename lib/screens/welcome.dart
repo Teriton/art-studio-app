@@ -1,3 +1,4 @@
+import 'package:art_studio_app/objects/workshop_api_repository.dart';
 import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/widgets/login.dart';
 import 'package:art_studio_app/widgets/page_indicator.dart';
@@ -115,7 +116,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (ctx) {
-                          return const GeneralScreen();
+                          return GeneralScreen();
                         },
                       ),
                     );

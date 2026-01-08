@@ -2,6 +2,7 @@ import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/screens/welcome.dart';
 import 'package:art_studio_app/widgets/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -33,8 +34,12 @@ void main() {
 
     testWidgets("Verification login fields test ", (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Login(onBackButtonClick: () {}, onLoginButtonClick: () {}),
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: Login(onBackButtonClick: () {}, onLoginButtonClick: () {}),
+            ),
+          ),
         ),
       );
 
@@ -59,8 +64,11 @@ void main() {
       expect(loginErrorText, findsNothing);
       expect(passwordErrorText, findsNothing);
     });
-    testWidgets("Go to general test ", (tester) async {
-      await tester.pumpWidget(MaterialApp(home: WelcomeScreen()));
+    testWidgets("Go to general test", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(child: MaterialApp(home: WelcomeScreen())),
+      );
+
       final nextButton = find.widgetWithText(ElevatedButton, "Далее");
       expect(nextButton, findsOneWidget);
       await tester.tap(nextButton);
@@ -73,13 +81,12 @@ void main() {
       final signinButton = find.widgetWithText(ElevatedButton, "Войти");
       expect(signinButton, findsOneWidget);
 
-      await tester.enterText(login, "username");
-      await tester.enterText(password, "password");
+      await tester.enterText(login, "tester");
+      await tester.enterText(password, "test");
       await tester.tap(signinButton);
       await tester.pumpAndSettle();
 
-      final appBarGeneral = find.text(GeneralScreen.textFields["appBarTitle"]!);
-      expect(appBarGeneral, findsOne);
+      expect(find.byType(GeneralScreen), findsOneWidget);
       expect(find.byIcon(Icons.arrow_back), findsNothing);
     });
   });

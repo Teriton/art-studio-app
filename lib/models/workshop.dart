@@ -1,8 +1,8 @@
 import 'package:art_studio_app/models/master.dart';
 import 'package:art_studio_app/models/status.dart';
-import 'package:art_studio_app/objectss/status_converter.dart';
+import 'package:art_studio_app/models/technique.dart';
+import 'package:art_studio_app/objects/status_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 part 'workshop.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -79,4 +79,29 @@ class WorkshopMaster extends Workshop {
       _$WorkshopMasterFromJson(json);
   @override
   Map<String, dynamic> toJson() => _$WorkshopMasterToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class WorkshopRel extends Workshop {
+  final Master master;
+  final Technique technique;
+
+  WorkshopRel({
+    required this.master,
+    required this.technique,
+    required super.id,
+    required super.masterId,
+    required super.techniqueId,
+    required super.title,
+    required super.difficulty,
+    required super.duration,
+    required super.fee,
+    required super.status,
+    required super.description,
+    required super.image,
+  });
+  factory WorkshopRel.fromJson(Map<String, dynamic> json) =>
+      _$WorkshopRelFromJson(json);
+  @override
+  Map<String, dynamic> toJson() => _$WorkshopRelToJson(this);
 }

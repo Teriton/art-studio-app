@@ -1,5 +1,9 @@
+import 'package:art_studio_app/objects/workshop_api_repository.dart';
+import 'package:art_studio_app/providers/auth_provider.dart';
+import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/screens/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
@@ -11,14 +15,15 @@ var kDarkColorScheme = ColorScheme.fromSeed(
   brightness: .dark,
 );
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  runApp(ProviderScope(child: ArtStrudio()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ArtStrudio extends ConsumerWidget {
+  const ArtStrudio({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Art Studio',
@@ -27,7 +32,13 @@ class MyApp extends StatelessWidget {
         colorScheme: kColorScheme,
       ),
 
-      home: WelcomeScreen(),
+      home: ref
+          .watch(authProvider)
+          .when(
+            data: (isAuth) => isAuth ? GeneralScreen() : WelcomeScreen(),
+            error: (error, _) => Center(child: Text(error.toString())),
+            loading: () => Center(child: CircularProgressIndicator()),
+          ),
     );
   }
 }

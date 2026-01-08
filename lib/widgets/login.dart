@@ -1,7 +1,10 @@
+import 'package:art_studio_app/objects/workshop_api_repository.dart';
+import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
 import 'package:art_studio_app/screens/sign_up.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Login extends StatefulWidget {
+class Login extends ConsumerStatefulWidget {
   const Login({
     super.key,
     required this.onBackButtonClick,
@@ -10,26 +13,43 @@ class Login extends StatefulWidget {
 
   static const textFields = {
     "errorLogin": "Введите логин больше 3 символов",
-    "errorPassword": "Пароль должен быть длинее 6 символов",
+    "errorPassword": "Пароль должен быть длинее 4 символов",
   };
 
   final void Function() onBackButtonClick;
   final void Function() onLoginButtonClick;
 
   @override
-  State<Login> createState() => _LoginState();
+  ConsumerState<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends ConsumerState<Login> {
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   String? _enteredLogin;
   String? _enteredPassword;
 
-  void _saveItem() {
+  void _saveItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_enteredLogin);
-      print(_enteredPassword);
+      setState(() {
+        _isLoading = true;
+      });
+      final prod = await ref.read(workshopRepositoryProvider.future);
+      final logedIn = await prod.login(
+        username: _enteredLogin!,
+        password: _enteredPassword!,
+      );
+      if (logedIn == false) {
+        setState(() {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("Неверный логин или пароль")));
+          _isLoading = false;
+        });
+        return;
+      }
       widget.onLoginButtonClick();
     }
   }
@@ -86,7 +106,7 @@ class _LoginState extends State<Login> {
                     decoration: const InputDecoration(labelText: "Пароль"),
                     obscureText: true,
                     validator: (value) {
-                      if (value == null || value.trim().length < 6) {
+                      if (value == null || value.trim().length < 4) {
                         return Login.textFields["errorPassword"];
                       }
                       return null;
@@ -105,7 +125,9 @@ class _LoginState extends State<Login> {
                             context,
                           ).colorScheme.onPrimary,
                         ),
-                        child: Text("Войти"),
+                        child: _isLoading
+                            ? CircularProgressIndicator()
+                            : Text("Войти"),
                       ),
                       TextButton(
                         onPressed: () {

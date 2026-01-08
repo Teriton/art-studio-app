@@ -1,21 +1,31 @@
 import 'package:art_studio_app/screens/general.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group("Geneal screen", () {
     testWidgets("Back button is absent", (tester) async {
-      await tester.pumpWidget(MaterialApp(home: GeneralScreen()));
+      await tester.pumpWidget(
+        ProviderScope(child: MaterialApp(home: GeneralScreen())),
+      );
+      await tester.pumpAndSettle();
       expect(find.byIcon(Icons.arrow_back), findsNothing);
     });
     testWidgets("Naigation bar elements", (tester) async {
-      await tester.pumpWidget(MaterialApp(home: GeneralScreen()));
+      await tester.pumpWidget(
+        ProviderScope(child: MaterialApp(home: GeneralScreen())),
+      );
+      await tester.pumpAndSettle();
       expect(find.byIcon(Icons.list), findsOneWidget);
       expect(find.byIcon(Icons.payment), findsOneWidget);
       expect(find.byIcon(Icons.account_box), findsOneWidget);
     });
     testWidgets("Test tabs", (tester) async {
-      await tester.pumpWidget(MaterialApp(home: GeneralScreen()));
+      await tester.pumpWidget(
+        ProviderScope(child: MaterialApp(home: GeneralScreen())),
+      );
+      await tester.pumpAndSettle();
       final ordersButton = find.byIcon(Icons.payment);
       expect(ordersButton, findsOneWidget);
       final profileButton = find.byIcon(Icons.account_box);
