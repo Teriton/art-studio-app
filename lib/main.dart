@@ -1,4 +1,3 @@
-import 'package:art_studio_app/objects/workshop_api_repository.dart';
 import 'package:art_studio_app/providers/auth_provider.dart';
 import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/screens/welcome.dart';

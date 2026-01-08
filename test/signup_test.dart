@@ -1,15 +1,29 @@
+import 'package:art_studio_app/screens/general.dart';
+import 'package:art_studio_app/screens/sign_up.dart';
+import 'package:art_studio_app/screens/welcome.dart';
 import 'package:art_studio_app/widgets/signup/contacts_enter.dart';
 import 'package:art_studio_app/widgets/signup/name_enter.dart';
 import 'package:art_studio_app/widgets/signup/password_enter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group("Enter name screen", () {
     testWidgets("Test visual", (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: NameEnter(onNextButtonClick: () {}, onBackButtonClick: () {}),
+        ProviderScope(
+          child: MaterialApp(
+            home: NameEnter(
+              onNextButtonClick:
+                  ({
+                    required enteredLastName,
+                    required enteredLogin,
+                    required enteredName,
+                  }) {},
+              onBackButtonClick: () {},
+            ),
+          ),
         ),
       );
 
@@ -22,8 +36,18 @@ void main() {
 
     testWidgets("Validator test", (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: NameEnter(onNextButtonClick: () {}, onBackButtonClick: () {}),
+        ProviderScope(
+          child: MaterialApp(
+            home: NameEnter(
+              onNextButtonClick:
+                  ({
+                    required enteredLastName,
+                    required enteredLogin,
+                    required enteredName,
+                  }) {},
+              onBackButtonClick: () {},
+            ),
+          ),
         ),
       );
       final name = find.widgetWithText(
@@ -67,6 +91,52 @@ void main() {
       expect(lastnameErrorText, findsNothing);
       expect(erorrLoginText, findsNothing);
     });
+
+    testWidgets("Login available", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            home: NameEnter(
+              onNextButtonClick:
+                  ({
+                    required enteredLastName,
+                    required enteredLogin,
+                    required enteredName,
+                  }) {},
+              onBackButtonClick: () {},
+            ),
+          ),
+        ),
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, NameEnter.textFields["name"]!),
+        "Testirovshchik",
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, NameEnter.textFields["lastname"]!),
+        "Shenya",
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, NameEnter.textFields["login"]!),
+        "tester",
+      );
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+      expect(
+        find.text(NameEnter.textFields["loginIsNotAvailableError"]!),
+        findsOne,
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, NameEnter.textFields["login"]!),
+        "tester2",
+      );
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+      expect(
+        find.text(NameEnter.textFields["loginIsNotAvailableError"]!),
+        findsNothing,
+      );
+    });
   });
 
   group("Enter contacts screen", () {
@@ -74,7 +144,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: ContactsEnter(
-            onNextButtonClick: () {},
+            onNextButtonClick:
+                ({required enteredEmail, required enteredPhone}) {},
             onBackButtonClick: () {},
           ),
         ),
@@ -91,7 +162,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: ContactsEnter(
-            onNextButtonClick: () {},
+            onNextButtonClick:
+                ({required enteredEmail, required enteredPhone}) {},
             onBackButtonClick: () {},
           ),
         ),
@@ -134,7 +206,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: PasswordEnter(
-            onSignUpButtonClick: () {},
+            onSignUpButtonClick: ({required psw}) {},
             onBackButtonClick: () {},
           ),
         ),
@@ -150,7 +222,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: PasswordEnter(
-            onSignUpButtonClick: () {},
+            onSignUpButtonClick: ({required psw}) {},
             onBackButtonClick: () {},
           ),
         ),
@@ -190,5 +262,121 @@ void main() {
       expect(phoneErrorText, findsNothing);
       expect(emailErrorText, findsNothing);
     });
+  });
+  testWidgets("Navigation between tiles test", (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(child: MaterialApp(home: SignUpScreen())),
+    );
+    expect(find.byType(NameEnter), findsOneWidget);
+    await tester.enterText(
+      find.widgetWithText(TextFormField, NameEnter.textFields["name"]!),
+      "Testirovshchik",
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, NameEnter.textFields["lastname"]!),
+      "Shenya",
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, NameEnter.textFields["login"]!),
+      "shpack",
+    );
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(ContactsEnter), findsOneWidget);
+    await tester.enterText(
+      find.widgetWithText(TextFormField, ContactsEnter.textFields["phone"]!),
+      "+375291234567",
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, ContactsEnter.textFields["email"]!),
+      "zxc@mail.com",
+    );
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(PasswordEnter), findsOneWidget);
+  });
+
+  testWidgets("Back test", (tester) async {
+    await tester.pumpWidget(MaterialApp(home: WelcomeScreen()));
+    final nextButton = find.widgetWithText(
+      ElevatedButton,
+      WelcomeScreen.textFields["next"]!,
+    );
+    expect(nextButton, findsOneWidget);
+    await tester.tap(nextButton);
+    await tester.pumpAndSettle();
+
+    final signupButton = find.widgetWithText(
+      TextButton,
+      WelcomeScreen.textFields["signUp"]!,
+    );
+    expect(signupButton, findsOneWidget);
+    await tester.tap(signupButton);
+    await tester.pumpAndSettle();
+
+    final backButton = find.widgetWithText(
+      TextButton,
+      NameEnter.textFields["changeToLogin"]!,
+    );
+    expect(backButton, findsOneWidget);
+    await tester.tap(backButton);
+    await tester.pumpAndSettle();
+    expect(find.byType(WelcomeScreen), findsOneWidget);
+  });
+
+  testWidgets("Sign up an account", (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(home: ProviderScope(child: SignUpScreen())),
+      ),
+    );
+    expect(find.byType(NameEnter), findsOneWidget);
+    await tester.enterText(
+      find.widgetWithText(TextFormField, NameEnter.textFields["name"]!),
+      "Testirovshchik",
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, NameEnter.textFields["lastname"]!),
+      "Shenya",
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, NameEnter.textFields["login"]!),
+      "shpack",
+    );
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(ContactsEnter), findsOneWidget);
+    await tester.enterText(
+      find.widgetWithText(TextFormField, ContactsEnter.textFields["phone"]!),
+      "+375291234567",
+    );
+    await tester.enterText(
+      find.widgetWithText(TextFormField, ContactsEnter.textFields["email"]!),
+      "zxc@mail.com",
+    );
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(PasswordEnter), findsOneWidget);
+
+    await tester.enterText(
+      find.widgetWithText(TextFormField, PasswordEnter.textFields["password"]!),
+      "123456",
+    );
+    await tester.enterText(
+      find.widgetWithText(
+        TextFormField,
+        PasswordEnter.textFields["repeatPassword"]!,
+      ),
+      "123456",
+    );
+    final signupButton = find.widgetWithText(
+      ElevatedButton,
+      PasswordEnter.textFields["signUp"]!,
+    );
+    expect(signupButton, findsOneWidget);
+    await tester.tap(signupButton);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(GeneralScreen), findsOneWidget);
   });
 }

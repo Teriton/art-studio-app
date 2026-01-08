@@ -1,6 +1,6 @@
-import 'package:art_studio_app/objects/workshop_api_repository.dart';
 import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
 import 'package:art_studio_app/screens/sign_up.dart';
+import 'package:art_studio_app/screens/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -139,7 +139,7 @@ class _LoginState extends ConsumerState<Login> {
                             ),
                           );
                         },
-                        child: Text("У меня нету аккаунта"),
+                        child: Text(WelcomeScreen.textFields["signUp"]!),
                       ),
                     ],
                   ),

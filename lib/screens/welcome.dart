@@ -1,4 +1,3 @@
-import 'package:art_studio_app/objects/workshop_api_repository.dart';
 import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/widgets/login.dart';
 import 'package:art_studio_app/widgets/page_indicator.dart';
@@ -7,6 +6,8 @@ import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
+
+  static final textFields = {"next": "Далее", "signUp": "У меня нету аккаунта"};
 
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();

@@ -1,3 +1,4 @@
+import 'package:art_studio_app/screens/welcome.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeCard extends StatelessWidget {
@@ -38,7 +39,7 @@ class WelcomeCard extends StatelessWidget {
                           context,
                         ).colorScheme.onPrimary,
                       ),
-                      child: Text("Далее"),
+                      child: Text(WelcomeScreen.textFields["next"]!),
                     ),
                   ],
                 ),

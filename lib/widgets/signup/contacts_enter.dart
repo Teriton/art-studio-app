@@ -8,7 +8,11 @@ class ContactsEnter extends StatefulWidget {
     required this.onBackButtonClick,
   });
 
-  final void Function() onNextButtonClick;
+  final void Function({
+    required String enteredPhone,
+    required String enteredEmail,
+  })
+  onNextButtonClick;
   final void Function() onBackButtonClick;
   static const textFields = {
     "next": "Далее",
@@ -29,10 +33,11 @@ class _ContactsEnterState extends State<ContactsEnter> {
   void _saveItem() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_enteredPhone);
-      print(_enteredEmail);
       FocusScope.of(context).unfocus();
-      widget.onNextButtonClick();
+      widget.onNextButtonClick(
+        enteredPhone: _enteredPhone!,
+        enteredEmail: _enteredEmail!,
+      );
     }
   }
 

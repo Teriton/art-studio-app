@@ -1,7 +1,9 @@
+import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
 import 'package:art_studio_app/widgets/sign_up_form_decorator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NameEnter extends StatefulWidget {
+class NameEnter extends ConsumerStatefulWidget {
   const NameEnter({
     super.key,
     required this.onNextButtonClick,
@@ -10,7 +12,12 @@ class NameEnter extends StatefulWidget {
 
   final void Function() onBackButtonClick;
 
-  final void Function() onNextButtonClick;
+  final void Function({
+    required String enteredName,
+    required String enteredLastName,
+    required String enteredLogin,
+  })
+  onNextButtonClick;
 
   static const textFields = {
     "next": "Далее",
@@ -21,27 +28,52 @@ class NameEnter extends StatefulWidget {
     "errorLastname": "Поле фамилия должно быть заполнено",
     "login": "Логин (минимум 3 символа)",
     "erorrLogin": "Логин должен быть не менее 3 символов",
+    "loginIsNotAvailableError": "Логин уже занят",
   };
 
   @override
-  State<NameEnter> createState() => _NameEnterState();
+  ConsumerState<NameEnter> createState() => _NameEnterState();
 }
 
-class _NameEnterState extends State<NameEnter> {
+class _NameEnterState extends ConsumerState<NameEnter> {
   final _formKey = GlobalKey<FormState>();
   String? _enteredName;
   String? _enteredLastName;
   String? _enteredLogin;
+  bool _isLoading = false;
+  String? _error;
 
-  void _saveItem() {
+  void _saveItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_enteredName);
-      print(_enteredLastName);
-      print(_enteredLogin);
       FocusScope.of(context).unfocus();
-      widget.onNextButtonClick();
+      if (!(await _loginIsAvalable(_enteredLogin!))) {
+        setState(() {
+          _error = NameEnter.textFields['loginIsNotAvailableError'];
+        });
+        return;
+      }
+      widget.onNextButtonClick(
+        enteredName: _enteredName!,
+        enteredLastName: _enteredLastName!,
+        enteredLogin: _enteredLogin!,
+      );
+      setState(() {
+        _error = null;
+      });
     }
+  }
+
+  Future<bool> _loginIsAvalable(String login) async {
+    setState(() {
+      _isLoading = true;
+    });
+    final repo = await ref.read(workshopRepositoryProvider.future);
+    final result = await repo.isLoginAvailable(login);
+    setState(() {
+      _isLoading = false;
+    });
+    return result;
   }
 
   @override
@@ -109,11 +141,19 @@ class _NameEnterState extends State<NameEnter> {
                 _enteredLogin = value!;
               },
             ),
+            if (_error != null)
+              Text(
+                _error!,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
             const SizedBox(height: 16.0),
-
             ElevatedButton(
-              onPressed: _saveItem,
-              child: Text(NameEnter.textFields["next"]!),
+              onPressed: _isLoading ? () {} : _saveItem,
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : Text(NameEnter.textFields["next"]!),
             ),
             TextButton(
               onPressed: widget.onBackButtonClick,

@@ -8,7 +8,7 @@ class PasswordEnter extends StatefulWidget {
     required this.onBackButtonClick,
   });
 
-  final void Function() onSignUpButtonClick;
+  final void Function({required String psw}) onSignUpButtonClick;
   final void Function() onBackButtonClick;
   static const textFields = {
     "signUp": "Зарегестрироваться",
@@ -25,15 +25,15 @@ class PasswordEnter extends StatefulWidget {
 class _PasswordEnterState extends State<PasswordEnter> {
   final _formKey = GlobalKey<FormState>();
   String? _enteredPassword;
+  // ignore: unused_field
   String? _enteredRepeatPassword;
 
   void _saveItem() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_enteredPassword);
-      print(_enteredRepeatPassword);
+
       FocusScope.of(context).unfocus();
-      widget.onSignUpButtonClick();
+      widget.onSignUpButtonClick(psw: _enteredPassword!);
     }
   }
 

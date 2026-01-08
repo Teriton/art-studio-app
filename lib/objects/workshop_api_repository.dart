@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -11,6 +12,8 @@ abstract class IWorkshopRepository {
   Future<List<WorkshopRel>?> getWorkshops();
   Future<bool> hasAccessToken();
   Future<bool> logout();
+  Future<bool> signUp(UserAdd user);
+  Future<bool> isLoginAvailable(String login);
 }
 
 class WorkshopAPIRepository implements IWorkshopRepository {
@@ -97,5 +100,35 @@ class WorkshopAPIRepository implements IWorkshopRepository {
         .toList();
 
     return workshops;
+  }
+
+  @override
+  Future<bool> signUp(UserAdd user) async {
+    Response response;
+    try {
+      response = await _dio.post("/signup", data: user.toJson());
+    } catch (e) {
+      log(e.toString(), level: 900);
+      return false;
+    }
+
+    return response.statusCode! < 400;
+  }
+
+  @override
+  Future<bool> isLoginAvailable(String login) async {
+    Response response;
+    try {
+      response = await _dio.post("/isLoginAvailable?login=$login");
+    } catch (e) {
+      log(e.toString(), level: 900);
+      return false;
+    }
+
+    if (!response.data["answer"]) {
+      return false;
+    }
+
+    return response.data["answer"];
   }
 }

@@ -1,4 +1,5 @@
 import 'package:art_studio_app/screens/general.dart';
+import 'package:art_studio_app/screens/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -42,6 +43,22 @@ void main() {
       await tester.tap(workshopsButton);
       await tester.pumpAndSettle();
       expect(find.widgetWithText(AppBar, "Мастерклассы"), findsOneWidget);
+    });
+
+    testWidgets("Back to welcome", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(child: MaterialApp(home: GeneralScreen())),
+      );
+      await tester.pumpAndSettle();
+      final profileButton = find.byIcon(Icons.account_box);
+      expect(profileButton, findsOneWidget);
+      await tester.tap(profileButton);
+      await tester.pumpAndSettle();
+      final logoutButton = find.widgetWithIcon(IconButton, Icons.logout);
+      expect(logoutButton, findsOneWidget);
+      await tester.tap(logoutButton);
+      await tester.pumpAndSettle();
+      expect(find.byType(WelcomeScreen), findsOneWidget);
     });
   });
 }

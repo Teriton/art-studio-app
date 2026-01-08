@@ -1,22 +1,31 @@
-import 'package:art_studio_app/objects/workshop_api_repository.dart';
+import 'package:art_studio_app/models/user.dart';
+import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
 import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/widgets/signup/contacts_enter.dart';
 import 'package:art_studio_app/widgets/signup/name_enter.dart';
 import 'package:art_studio_app/widgets/page_indicator.dart';
 import 'package:art_studio_app/widgets/signup/password_enter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen>
+class _SignUpScreenState extends ConsumerState<SignUpScreen>
     with TickerProviderStateMixin {
   late PageController _pageViewController;
   late TabController _tabController;
+  String? _fitstName;
+  String? _lastName;
+  String? _login;
+  String? _email;
+  String? _phoneNumber;
+  String? _psw;
+  bool _isLoading = false;
   int _currentPageIndex = 0;
 
   @override
@@ -47,6 +56,30 @@ class _SignUpScreenState extends State<SignUpScreen>
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
     );
+  }
+
+  void _signUpUser(UserAdd user) async {
+    setState(() {
+      _isLoading = true;
+    });
+    final repo = await ref.read(workshopRepositoryProvider.future);
+    final resultSignUp = await repo.signUp(user);
+    if (resultSignUp == true) {
+      final resultLogin = await repo.login(
+        username: user.login,
+        password: user.psw,
+      );
+      if (mounted && resultLogin) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (ctx) => GeneralScreen()),
+          (Route<dynamic> route) => false,
+        );
+      }
+      return;
+    }
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -97,43 +130,68 @@ class _SignUpScreenState extends State<SignUpScreen>
           width: .infinity,
           height: .infinity,
           child: Center(
-            child: PageView(
-              physics: NeverScrollableScrollPhysics(),
-              controller: _pageViewController,
-              onPageChanged: _handlePageViewChanged,
-              children: [
-                NameEnter(
-                  onBackButtonClick: () {
-                    Navigator.of(context).pop();
-                  },
-                  onNextButtonClick: () {
-                    _updateCurrentPageIndex(1);
-                  },
-                ),
-                ContactsEnter(
-                  onBackButtonClick: () {
-                    _updateCurrentPageIndex(0);
-                  },
-                  onNextButtonClick: () {
-                    _updateCurrentPageIndex(2);
-                  },
-                ),
-                PasswordEnter(
-                  onSignUpButtonClick: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) {
-                          return GeneralScreen();
+            child: _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : PageView(
+                    physics: NeverScrollableScrollPhysics(),
+                    controller: _pageViewController,
+                    onPageChanged: _handlePageViewChanged,
+                    children: [
+                      NameEnter(
+                        onBackButtonClick: () {
+                          Navigator.of(context).pop();
+                        },
+                        onNextButtonClick:
+                            ({
+                              required enteredLastName,
+                              required enteredLogin,
+                              required enteredName,
+                            }) {
+                              _fitstName = enteredName;
+                              _lastName = enteredLastName;
+                              _login = enteredLogin;
+                              _updateCurrentPageIndex(1);
+                            },
+                      ),
+                      ContactsEnter(
+                        onBackButtonClick: () {
+                          _updateCurrentPageIndex(0);
+                        },
+                        onNextButtonClick:
+                            ({required enteredEmail, required enteredPhone}) {
+                              _email = enteredEmail;
+                              _phoneNumber = enteredPhone;
+                              _updateCurrentPageIndex(2);
+                            },
+                      ),
+                      PasswordEnter(
+                        onSignUpButtonClick: ({required psw}) {
+                          _psw = psw;
+                          UserAdd newUser;
+                          if (_fitstName != null ||
+                              _lastName != null ||
+                              _email != null ||
+                              _phoneNumber != null ||
+                              _login != null ||
+                              _psw != null) {
+                            newUser = UserAdd(
+                              firstName: _fitstName!,
+                              lastName: _lastName!,
+                              email: _email!,
+                              phoneNumber: _phoneNumber!,
+                              login: _login!,
+                              psw: _psw!,
+                              admin: false,
+                            );
+                            _signUpUser(newUser);
+                          }
+                        },
+                        onBackButtonClick: () {
+                          _updateCurrentPageIndex(1);
                         },
                       ),
-                    );
-                  },
-                  onBackButtonClick: () {
-                    _updateCurrentPageIndex(1);
-                  },
-                ),
-              ],
-            ),
+                    ],
+                  ),
           ),
         ),
       ),

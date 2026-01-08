@@ -1,10 +1,25 @@
 import 'package:art_studio_app/models/master.dart';
 import 'package:art_studio_app/models/status.dart';
 import 'package:art_studio_app/models/technique.dart';
+import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:art_studio_app/objects/workshop_api_repository.dart';
 
 class WorkshopRepositoryMock implements IWorkshopRepository {
+  bool _isLogedIn = false;
+  List<User> users = [
+    User(
+      id: 1,
+      firstName: "Test",
+      lastName: "Test",
+      email: "Test",
+      phoneNumber: "Test",
+      login: "tester",
+      psw: "test",
+      admin: false,
+    ),
+  ];
+
   @override
   Future<WorkshopMaster?> getClosestWorkshop() {
     return Future(
@@ -86,12 +101,15 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
 
   @override
   Future<bool> hasAccessToken() {
-    return Future(() => false);
+    return Future(() => _isLogedIn);
   }
 
   @override
   Future<bool> login({required String username, required String password}) {
-    if (username == "tester" && password == "test") {
+    if (users
+        .where((user) => user.login == username && user.psw == password)
+        .isNotEmpty) {
+      _isLogedIn = true;
       return Future(() => true);
     }
     return Future(() => false);
@@ -99,7 +117,32 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
 
   @override
   Future<bool> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
+    _isLogedIn = false;
+    return Future(() => true);
+  }
+
+  @override
+  Future<bool> signUp(UserAdd user) {
+    users.add(
+      User(
+        id: DateTime.now().second,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        login: user.login,
+        psw: user.psw,
+        admin: false,
+      ),
+    );
+    return Future(() => true);
+  }
+
+  @override
+  Future<bool> isLoginAvailable(String login) {
+    if (users.where((user) => user.login == login).isNotEmpty) {
+      return Future(() => false);
+    }
+    return Future(() => true);
   }
 }
