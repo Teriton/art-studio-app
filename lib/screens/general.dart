@@ -47,7 +47,16 @@ class _GeneralScreenState extends ConsumerState<GeneralScreen> {
           _initWorkshops();
           break;
         }
-        content = WorkshopList(workshops: _workshops!);
+        content = RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              _workshops = null;
+            });
+            _initWorkshops();
+            return;
+          },
+          child: WorkshopList(workshops: _workshops!),
+        );
         activePageTitle = GeneralScreen.textFields["workshops"]!;
         break;
       case 1:

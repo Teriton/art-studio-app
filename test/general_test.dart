@@ -1,5 +1,7 @@
+import 'package:art_studio_app/screens/detailed_workshop.dart';
 import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/screens/welcome.dart';
+import 'package:art_studio_app/widgets/workshop_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -59,6 +61,31 @@ void main() {
       await tester.tap(logoutButton);
       await tester.pumpAndSettle();
       expect(find.byType(WelcomeScreen), findsOneWidget);
+    });
+  });
+
+  group("List test", () {
+    // Желательно переделать
+    testWidgets("Reload workshops", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(child: MaterialApp(home: GeneralScreen())),
+      );
+      await tester.pumpAndSettle();
+      await tester.drag(find.byType(RefreshIndicator), const Offset(0, 300));
+      await tester.pumpAndSettle();
+      expect(find.byType(WorkshopCard), findsWidgets);
+    });
+
+    testWidgets("Switch to detailed", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(child: MaterialApp(home: GeneralScreen())),
+      );
+      await tester.pumpAndSettle();
+      final item1 = find.widgetWithText(WorkshopCard, "Sosal???");
+      expect(item1, findsOneWidget);
+      await tester.tap(item1);
+      await tester.pumpAndSettle();
+      expect(find.byType(DetailedWorkshopScreen), findsOneWidget);
     });
   });
 }

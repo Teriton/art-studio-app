@@ -1,4 +1,6 @@
 import 'package:art_studio_app/models/master.dart';
+import 'package:art_studio_app/models/schedule.dart';
+import 'package:art_studio_app/models/set_of_materials.dart';
 import 'package:art_studio_app/models/status.dart';
 import 'package:art_studio_app/models/technique.dart';
 import 'package:art_studio_app/objects/status_converter.dart';
@@ -104,4 +106,79 @@ class WorkshopRel extends Workshop {
       _$WorkshopRelFromJson(json);
   @override
   Map<String, dynamic> toJson() => _$WorkshopRelToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class WorkshopSetsOfMaterial extends Workshop {
+  final List<SetOfMaterial> setsOfMaterials;
+
+  WorkshopSetsOfMaterial({
+    required this.setsOfMaterials,
+    required super.id,
+    required super.masterId,
+    required super.techniqueId,
+    required super.title,
+    required super.difficulty,
+    required super.duration,
+    required super.fee,
+    required super.status,
+    required super.description,
+    required super.image,
+  });
+  factory WorkshopSetsOfMaterial.fromJson(Map<String, dynamic> json) =>
+      _$WorkshopSetsOfMaterialFromJson(json);
+  @override
+  Map<String, dynamic> toJson() => _$WorkshopSetsOfMaterialToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class WorkshopSessions extends Workshop {
+  final List<Schedule> sessions;
+
+  WorkshopSessions({
+    required this.sessions,
+    required super.id,
+    required super.masterId,
+    required super.techniqueId,
+    required super.title,
+    required super.difficulty,
+    required super.duration,
+    required super.fee,
+    required super.status,
+    required super.description,
+    required super.image,
+  });
+  factory WorkshopSessions.fromJson(Map<String, dynamic> json) =>
+      _$WorkshopSessionsFromJson(json);
+  @override
+  Map<String, dynamic> toJson() => _$WorkshopSessionsToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class WorkshopAllRel extends Workshop {
+  final Master master;
+  final Technique technique;
+  final List<SetOfMaterial> setsOfMaterial;
+  final List<Schedule> sessions;
+
+  WorkshopAllRel({
+    required this.master,
+    required this.technique,
+    required this.setsOfMaterial,
+    required this.sessions,
+    required super.id,
+    required super.masterId,
+    required super.techniqueId,
+    required super.title,
+    required super.difficulty,
+    required super.duration,
+    required super.fee,
+    required super.status,
+    required super.description,
+    required super.image,
+  });
+  factory WorkshopAllRel.fromJson(Map<String, dynamic> json) =>
+      _$WorkshopAllRelFromJson(json);
+  @override
+  Map<String, dynamic> toJson() => _$WorkshopAllRelToJson(this);
 }

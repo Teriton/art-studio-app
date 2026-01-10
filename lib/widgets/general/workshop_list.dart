@@ -9,10 +9,16 @@ class WorkshopList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       itemCount: workshops.length,
+      separatorBuilder: (ctx, index) {
+        return SizedBox(height: 6);
+      },
       itemBuilder: (ctx, index) {
-        return WorkshopCard(workshop: workshops[index]);
+        return WorkshopCard(
+          workshop: workshops[index],
+          key: ValueKey(workshops[index].id),
+        );
       },
     );
   }

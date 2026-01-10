@@ -1,4 +1,7 @@
 import 'package:art_studio_app/models/master.dart';
+import 'package:art_studio_app/models/material.dart';
+import 'package:art_studio_app/models/schedule.dart';
+import 'package:art_studio_app/models/set_of_materials.dart';
 import 'package:art_studio_app/models/status.dart';
 import 'package:art_studio_app/models/technique.dart';
 import 'package:art_studio_app/models/user.dart';
@@ -144,5 +147,55 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
       return Future(() => false);
     }
     return Future(() => true);
+  }
+
+  @override
+  Future<WorkshopAllRel?> getWorkshopAllRelById(int id) async {
+    return WorkshopAllRel(
+      master: Master(
+        id: 2,
+        firstName: "SHpaaCK",
+        lastName: "Vitya",
+        specialization: "Pivo",
+        experience: 12,
+        bio: "Loh kakoyto",
+        image: "Pivo",
+      ),
+      technique: Technique(id: 12, name: "Solenoe", description: "Opasno"),
+      id: 2,
+      masterId: 2,
+      techniqueId: 12,
+      title: "Sosal??",
+      difficulty: "Pivo",
+      duration: 12,
+      fee: 12.22,
+      status: Status.active,
+      description: "Sloshno strashno virubay",
+      image: "Delfin",
+      setsOfMaterial: [
+        SetOfMaterial(
+          material: Material(
+            id: 1,
+            name: "Тапор",
+            description: "Острое опасное оружине",
+            cost: 69.99,
+            type: "лезвие",
+            unit: "шт.",
+          ),
+          workshopId: 1,
+          materialId: 1,
+          quantity: 20,
+        ),
+      ],
+      sessions: [
+        Schedule(
+          id: 1,
+          workshopId: 1,
+          date: DateTime.now(),
+          location: "Узбекистан",
+          numberOfSeats: 10,
+        ),
+      ],
+    );
   }
 }

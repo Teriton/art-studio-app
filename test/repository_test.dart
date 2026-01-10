@@ -74,5 +74,11 @@ void main() {
       final testerLogin2 = await repository.isLoginAvailable("tester2");
       expect(testerLogin2, true);
     });
+
+    test("Clossest workshop get", () async {
+      final repository = WorkshopRepositoryMock();
+      final workshop = await repository.getClosestWorkshop();
+      expect(workshop != null, true);
+    });
   });
 }

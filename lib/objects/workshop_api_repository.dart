@@ -14,6 +14,7 @@ abstract class IWorkshopRepository {
   Future<bool> logout();
   Future<bool> signUp(UserAdd user);
   Future<bool> isLoginAvailable(String login);
+  Future<WorkshopAllRel?> getWorkshopAllRelById(int id);
 }
 
 class WorkshopAPIRepository implements IWorkshopRepository {
@@ -130,5 +131,18 @@ class WorkshopAPIRepository implements IWorkshopRepository {
     }
 
     return response.data["answer"];
+  }
+
+  @override
+  Future<WorkshopAllRel?> getWorkshopAllRelById(int id) async {
+    Response response;
+    try {
+      response = await _dio.get("/workshop/$id");
+    } catch (e) {
+      log(e.toString(), level: 900);
+      return null;
+    }
+    WorkshopAllRel workshop = WorkshopAllRel.fromJson(response.data);
+    return workshop;
   }
 }
