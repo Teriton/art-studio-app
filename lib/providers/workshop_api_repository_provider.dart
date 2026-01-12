@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final workshopRepositoryProvider =
     FutureProvider.autoDispose<IWorkshopRepository>((ref) async {
       if (AppConfig.isDevelopment || AppConfig.isProduction) {
-        final repo = WorkshopAPIRepository(baseUrl: "http://192.168.3.18/api/");
+        final repo = WorkshopAPIRepository(
+          baseUrl: "http://192.168.0.112/api/",
+        );
         await repo.init();
         return repo;
       }

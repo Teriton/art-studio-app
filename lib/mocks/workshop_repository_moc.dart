@@ -195,6 +195,27 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
           location: "Узбекистан",
           numberOfSeats: 10,
         ),
+        Schedule(
+          id: 2,
+          workshopId: 1,
+          date: DateTime.now().add(Duration(hours: 2)),
+          location: "Узбекистан",
+          numberOfSeats: 10,
+        ),
+        Schedule(
+          id: 1,
+          workshopId: 1,
+          date: DateTime.now().add(Duration(days: 1)),
+          location: "Узбекистан",
+          numberOfSeats: 10,
+        ),
+        Schedule(
+          id: 2,
+          workshopId: 1,
+          date: DateTime.now().add(Duration(hours: 2, days: 1)),
+          location: "Узбекистан",
+          numberOfSeats: 10,
+        ),
       ],
     );
   }

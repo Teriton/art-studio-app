@@ -80,5 +80,10 @@ void main() {
       final workshop = await repository.getClosestWorkshop();
       expect(workshop != null, true);
     });
+    test("Get workhop by logit", () async {
+      final repository = WorkshopRepositoryMock();
+      final workshop = await repository.getWorkshopAllRelById(1);
+      expect(workshop != null, true);
+    });
   });
 }

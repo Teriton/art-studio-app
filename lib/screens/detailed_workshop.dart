@@ -95,7 +95,8 @@ class _DetailedWorkshopScreenState
             ),
           ),
           if (workshopAllRel == null) CircularProgressIndicator(),
-          if (workshopAllRel != null) SessionsSection(),
+          if (workshopAllRel != null)
+            SessionsSection(sessions: workshopAllRel!.sessions),
         ],
       ),
     );
