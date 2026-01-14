@@ -1,5 +1,6 @@
 import 'package:art_studio_app/mocks/workshop_repository_moc.dart';
 import 'package:art_studio_app/models/schedule.dart';
+import 'package:art_studio_app/objects/date_formater.dart';
 import 'package:art_studio_app/widgets/detailed/sessions_date_block.dart';
 import 'package:art_studio_app/widgets/detailed/sessions_section.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,23 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byType(SessionsDateBlock), findsWidgets);
+    });
+    testWidgets("Expandes test", (tester) async {
+      final sessionsArr = await getSessions();
+      final formater = DateFormater();
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(body: SessionsSection(sessions: sessionsArr)),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final dateButton = find.widgetWithText(
+        ExpansionTile,
+        formater.formatDate(sessionsArr[0].date),
+      );
+      expect(dateButton, findsWidgets);
     });
   });
 }

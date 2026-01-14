@@ -186,6 +186,45 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
           materialId: 1,
           quantity: 20,
         ),
+        SetOfMaterial(
+          material: Material(
+            id: 2,
+            name: "Кирка",
+            description: "Острое опасное бревно",
+            cost: 68.99,
+            type: "лезвие",
+            unit: "unit.",
+          ),
+          workshopId: 1,
+          materialId: 3,
+          quantity: 7,
+        ),
+        SetOfMaterial(
+          material: Material(
+            id: 3,
+            name: "Pivo",
+            description: "Острое опасное оружине",
+            cost: 69.99,
+            type: "лезвие",
+            unit: "шт.",
+          ),
+          workshopId: 1,
+          materialId: 3,
+          quantity: 20,
+        ),
+        SetOfMaterial(
+          material: Material(
+            id: 4,
+            name: "Kobalt",
+            description: "Острое опасное оружине",
+            cost: 69.99,
+            type: "лезвие",
+            unit: "шт.",
+          ),
+          workshopId: 1,
+          materialId: 4,
+          quantity: 20,
+        ),
       ],
       sessions: [
         Schedule(

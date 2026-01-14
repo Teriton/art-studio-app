@@ -1,5 +1,6 @@
 import 'package:art_studio_app/screens/detailed_workshop.dart';
 import 'package:art_studio_app/widgets/detailed/sessions_section.dart';
+import 'package:art_studio_app/widgets/detailed/sets_of_material_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -122,6 +123,18 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(SessionsSection), findsOneWidget);
+    });
+    testWidgets("Sets of materials section apear", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            home: DetailedWorkshopScreen(workshop: getWorkshop()),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SetsOfMaterialSection), findsOneWidget);
     });
   });
 }
