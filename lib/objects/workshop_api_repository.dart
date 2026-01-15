@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:art_studio_app/models/orders.dart';
 import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
-import 'package:art_studio_app/widgets/general/orders_list.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';

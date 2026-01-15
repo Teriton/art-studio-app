@@ -1,4 +1,5 @@
 import 'package:art_studio_app/models/orders.dart';
+import 'package:art_studio_app/widgets/order_card.dart';
 import 'package:flutter/material.dart';
 
 class OrdersList extends StatelessWidget {
@@ -8,8 +9,14 @@ class OrdersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [for (var order in orders) Text(order.session.workshop.title)],
+    return ListView.separated(
+      itemCount: orders.length,
+      separatorBuilder: (ctx, index) {
+        return SizedBox(height: 6);
+      },
+      itemBuilder: (ctx, index) {
+        return OrderCard(order: orders[index], key: ValueKey(orders[index].id));
+      },
     );
   }
 }

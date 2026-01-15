@@ -8,7 +8,6 @@ import 'package:art_studio_app/models/technique.dart';
 import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:art_studio_app/objects/workshop_api_repository.dart';
-import 'package:art_studio_app/widgets/general/orders_list.dart';
 
 class WorkshopRepositoryMock implements IWorkshopRepository {
   bool _isLogedIn = false;
