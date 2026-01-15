@@ -80,10 +80,15 @@ void main() {
       final workshop = await repository.getClosestWorkshop();
       expect(workshop != null, true);
     });
-    test("Get workhop by logit", () async {
+    test("Get workhop by id", () async {
       final repository = WorkshopRepositoryMock();
       final workshop = await repository.getWorkshopAllRelById(1);
       expect(workshop != null, true);
+    });
+    test("Get user's orders", () async {
+      final repository = WorkshopRepositoryMock();
+      final orders = await repository.getOrders();
+      expect(orders != null, true);
     });
   });
 }

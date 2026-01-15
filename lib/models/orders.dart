@@ -1,6 +1,7 @@
 import 'package:art_studio_app/models/payments.dart';
 import 'package:art_studio_app/models/schedule.dart';
 import 'package:art_studio_app/models/status.dart';
+import 'package:art_studio_app/objects/status_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'orders.g.dart';
@@ -10,6 +11,7 @@ class OrderAdd {
   final int userId;
   final int scheduleId;
   final DateTime date;
+  @StatusConverter()
   final Status status;
 
   OrderAdd({

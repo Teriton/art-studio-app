@@ -1,5 +1,6 @@
 import 'package:art_studio_app/models/master.dart';
 import 'package:art_studio_app/models/material.dart';
+import 'package:art_studio_app/models/orders.dart';
 import 'package:art_studio_app/models/schedule.dart';
 import 'package:art_studio_app/models/set_of_materials.dart';
 import 'package:art_studio_app/models/status.dart';
@@ -7,6 +8,7 @@ import 'package:art_studio_app/models/technique.dart';
 import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:art_studio_app/objects/workshop_api_repository.dart';
+import 'package:art_studio_app/widgets/general/orders_list.dart';
 
 class WorkshopRepositoryMock implements IWorkshopRepository {
   bool _isLogedIn = false;
@@ -254,6 +256,66 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
           date: DateTime.now().add(Duration(hours: 2, days: 1)),
           location: "Узбекистан",
           numberOfSeats: 10,
+        ),
+      ],
+    );
+  }
+
+  @override
+  Future<List<OrderSession>?> getOrders() {
+    return Future(
+      () => [
+        OrderSession(
+          session: ScheduleWorkshop(
+            id: 1,
+            workshopId: 1,
+            date: DateTime.now(),
+            location: "Лондон",
+            numberOfSeats: 100,
+            workshop: Workshop(
+              id: 1,
+              masterId: 1,
+              techniqueId: 12,
+              title: "Sosal???",
+              difficulty: "Sosalno",
+              duration: 12,
+              fee: 12.22,
+              status: Status.active,
+              description: "Sloshno strashno virubay",
+              image: "Delfin",
+            ),
+          ),
+          id: 1,
+          userId: 1,
+          scheduleId: 1,
+          date: DateTime.now(),
+          status: Status.active,
+        ),
+        OrderSession(
+          session: ScheduleWorkshop(
+            id: 2,
+            workshopId: 2,
+            date: DateTime.now(),
+            location: "Piter",
+            numberOfSeats: 12,
+            workshop: Workshop(
+              id: 32,
+              masterId: 93,
+              techniqueId: 993,
+              title: "Sosal???",
+              difficulty: "Sosalno",
+              duration: 12,
+              fee: 12.22,
+              status: Status.active,
+              description: "Sloshno strashno virubay",
+              image: "Delfin",
+            ),
+          ),
+          id: 1,
+          userId: 1,
+          scheduleId: 1,
+          date: DateTime.now(),
+          status: Status.active,
         ),
       ],
     );

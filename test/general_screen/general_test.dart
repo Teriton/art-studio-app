@@ -1,6 +1,7 @@
 import 'package:art_studio_app/screens/detailed_workshop.dart';
 import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/screens/welcome.dart';
+import 'package:art_studio_app/widgets/general/orders_list.dart';
 import 'package:art_studio_app/widgets/workshop_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,7 +65,7 @@ void main() {
     });
   });
 
-  group("List test", () {
+  group("List workshops test", () {
     // Желательно переделать
     testWidgets("Reload workshops", (tester) async {
       await tester.pumpWidget(
@@ -86,6 +87,19 @@ void main() {
       await tester.tap(item1);
       await tester.pumpAndSettle();
       expect(find.byType(DetailedWorkshopScreen), findsOneWidget);
+    });
+  });
+  group("Orders list test", () {
+    testWidgets("Orders list loading", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(child: MaterialApp(home: GeneralScreen())),
+      );
+      await tester.pumpAndSettle();
+      final ordersButton = find.byIcon(Icons.payment);
+      expect(ordersButton, findsOneWidget);
+      await tester.tap(ordersButton);
+      await tester.pumpAndSettle();
+      expect(find.byType(OrdersList), findsOneWidget);
     });
   });
 }

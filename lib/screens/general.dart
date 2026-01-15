@@ -1,13 +1,15 @@
+import 'package:art_studio_app/models/orders.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
 import 'package:art_studio_app/screens/welcome.dart';
+import 'package:art_studio_app/widgets/general/orders_list.dart';
 import 'package:art_studio_app/widgets/general/workshop_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GeneralScreen extends ConsumerStatefulWidget {
-  const GeneralScreen({super.key});
-
+  const GeneralScreen({super.key, this.initialPageIndex = 0});
+  final int initialPageIndex;
   static final textFields = {
     "workshops": "Мастерклассы",
     "profile": "Профиль",
@@ -21,12 +23,27 @@ class GeneralScreen extends ConsumerStatefulWidget {
 class _GeneralScreenState extends ConsumerState<GeneralScreen> {
   int _selectedPageIndex = 0;
   List<WorkshopRel>? _workshops;
+  List<OrderSession>? _orders;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedPageIndex = widget.initialPageIndex;
+  }
 
   void _initWorkshops() async {
     final repo = await ref.read(workshopRepositoryProvider.future);
     final freshWorkshops = await repo.getWorkshops();
     setState(() {
       _workshops = freshWorkshops;
+    });
+  }
+
+  void _initOrders() async {
+    final repo = await ref.read(workshopRepositoryProvider.future);
+    final freshOrders = await repo.getOrders();
+    setState(() {
+      _orders = freshOrders;
     });
   }
 
@@ -60,7 +77,21 @@ class _GeneralScreenState extends ConsumerState<GeneralScreen> {
         activePageTitle = GeneralScreen.textFields["workshops"]!;
         break;
       case 1:
-        //content = Center(child: CircularProgressIndicator());
+        if (_orders == null) {
+          content = Center(child: CircularProgressIndicator());
+          _initOrders();
+          break;
+        }
+        content = RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              _orders = null;
+            });
+            _initOrders();
+            return;
+          },
+          child: OrdersList(orders: _orders!),
+        );
         activePageTitle = GeneralScreen.textFields["orders"]!;
         break;
       case 2:

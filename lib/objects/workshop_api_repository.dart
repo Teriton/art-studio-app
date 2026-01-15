@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'package:art_studio_app/models/orders.dart';
 import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
+import 'package:art_studio_app/widgets/general/orders_list.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -15,6 +17,7 @@ abstract class IWorkshopRepository {
   Future<bool> signUp(UserAdd user);
   Future<bool> isLoginAvailable(String login);
   Future<WorkshopAllRel?> getWorkshopAllRelById(int id);
+  Future<List<OrderSession>?> getOrders();
 }
 
 class WorkshopAPIRepository implements IWorkshopRepository {
@@ -144,5 +147,23 @@ class WorkshopAPIRepository implements IWorkshopRepository {
     }
     WorkshopAllRel workshop = WorkshopAllRel.fromJson(response.data);
     return workshop;
+  }
+
+  @override
+  Future<List<OrderSession>?> getOrders() async {
+    Response response;
+
+    try {
+      response = await _dio.get("/orders");
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+
+    List<OrderSession> orders = (response.data as List)
+        .map((item) => OrderSession.fromJson(item as Map<String, dynamic>))
+        .toList();
+
+    return orders;
   }
 }

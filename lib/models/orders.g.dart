@@ -10,20 +10,14 @@ OrderAdd _$OrderAddFromJson(Map<String, dynamic> json) => OrderAdd(
   userId: (json['user_id'] as num).toInt(),
   scheduleId: (json['schedule_id'] as num).toInt(),
   date: DateTime.parse(json['date'] as String),
-  status: $enumDecode(_$StatusEnumMap, json['status']),
+  status: const StatusConverter().fromJson(json['status'] as String),
 );
 
 Map<String, dynamic> _$OrderAddToJson(OrderAdd instance) => <String, dynamic>{
   'user_id': instance.userId,
   'schedule_id': instance.scheduleId,
   'date': instance.date.toIso8601String(),
-  'status': _$StatusEnumMap[instance.status]!,
-};
-
-const _$StatusEnumMap = {
-  Status.active: 'active',
-  Status.unactive: 'unactive',
-  Status.canceled: 'canceled',
+  'status': const StatusConverter().toJson(instance.status),
 };
 
 Order _$OrderFromJson(Map<String, dynamic> json) => Order(
@@ -31,14 +25,14 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order(
   userId: (json['user_id'] as num).toInt(),
   scheduleId: (json['schedule_id'] as num).toInt(),
   date: DateTime.parse(json['date'] as String),
-  status: $enumDecode(_$StatusEnumMap, json['status']),
+  status: const StatusConverter().fromJson(json['status'] as String),
 );
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
   'user_id': instance.userId,
   'schedule_id': instance.scheduleId,
   'date': instance.date.toIso8601String(),
-  'status': _$StatusEnumMap[instance.status]!,
+  'status': const StatusConverter().toJson(instance.status),
   'id': instance.id,
 };
 
@@ -48,7 +42,7 @@ OrderSession _$OrderSessionFromJson(Map<String, dynamic> json) => OrderSession(
   userId: (json['user_id'] as num).toInt(),
   scheduleId: (json['schedule_id'] as num).toInt(),
   date: DateTime.parse(json['date'] as String),
-  status: $enumDecode(_$StatusEnumMap, json['status']),
+  status: const StatusConverter().fromJson(json['status'] as String),
 );
 
 Map<String, dynamic> _$OrderSessionToJson(OrderSession instance) =>
@@ -56,7 +50,7 @@ Map<String, dynamic> _$OrderSessionToJson(OrderSession instance) =>
       'user_id': instance.userId,
       'schedule_id': instance.scheduleId,
       'date': instance.date.toIso8601String(),
-      'status': _$StatusEnumMap[instance.status]!,
+      'status': const StatusConverter().toJson(instance.status),
       'id': instance.id,
       'session': instance.session,
     };
@@ -68,14 +62,14 @@ OrderRels _$OrderRelsFromJson(Map<String, dynamic> json) => OrderRels(
   userId: (json['user_id'] as num).toInt(),
   scheduleId: (json['schedule_id'] as num).toInt(),
   date: DateTime.parse(json['date'] as String),
-  status: $enumDecode(_$StatusEnumMap, json['status']),
+  status: const StatusConverter().fromJson(json['status'] as String),
 );
 
 Map<String, dynamic> _$OrderRelsToJson(OrderRels instance) => <String, dynamic>{
   'user_id': instance.userId,
   'schedule_id': instance.scheduleId,
   'date': instance.date.toIso8601String(),
-  'status': _$StatusEnumMap[instance.status]!,
+  'status': const StatusConverter().toJson(instance.status),
   'id': instance.id,
   'session': instance.session,
   'payment': instance.payment,

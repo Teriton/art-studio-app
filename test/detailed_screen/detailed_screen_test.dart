@@ -4,7 +4,7 @@ import 'package:art_studio_app/widgets/detailed/sets_of_material_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import '../worcshop_card_test.dart';
+import '../general_screen/worcshop_card_test.dart';
 
 void main() {
   group("Detailed screen test", () {
