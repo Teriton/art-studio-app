@@ -1,6 +1,9 @@
 import 'package:art_studio_app/models/master.dart';
 import 'package:art_studio_app/models/material.dart';
 import 'package:art_studio_app/models/orders.dart';
+import 'package:art_studio_app/models/payment_method.dart';
+import 'package:art_studio_app/models/payment_status.dart';
+import 'package:art_studio_app/models/payments.dart';
 import 'package:art_studio_app/models/schedule.dart';
 import 'package:art_studio_app/models/set_of_materials.dart';
 import 'package:art_studio_app/models/status.dart';
@@ -261,10 +264,18 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
   }
 
   @override
-  Future<List<OrderSession>?> getOrders() {
+  Future<List<OrderRels>?> getOrders() {
     return Future(
       () => [
-        OrderSession(
+        OrderRels(
+          payment: Payment(
+            id: 1,
+            userId: 1,
+            orderId: 1,
+            status: PaymentStatus.unpaid,
+            fee: 12.00,
+            paymentMethod: PaymentMethod.card,
+          ),
           session: ScheduleWorkshop(
             id: 1,
             workshopId: 1,
@@ -284,13 +295,21 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
               image: "Delfin",
             ),
           ),
-          id: 1,
+          id: 2,
           userId: 1,
           scheduleId: 1,
           date: DateTime.now(),
           status: Status.active,
         ),
-        OrderSession(
+        OrderRels(
+          payment: Payment(
+            id: 1,
+            userId: 1,
+            orderId: 1,
+            status: PaymentStatus.unpaid,
+            fee: 12.00,
+            paymentMethod: PaymentMethod.card,
+          ),
           session: ScheduleWorkshop(
             id: 2,
             workshopId: 2,
@@ -318,5 +337,15 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
         ),
       ],
     );
+  }
+
+  @override
+  Future<bool> orderSession(int id) {
+    return Future(() => true);
+  }
+
+  @override
+  Future<bool> cancelOrder(int id) {
+    return Future(() => true);
   }
 }

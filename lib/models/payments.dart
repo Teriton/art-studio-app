@@ -2,6 +2,8 @@ import 'package:art_studio_app/models/orders.dart';
 import 'package:art_studio_app/models/payment_method.dart';
 import 'package:art_studio_app/models/payment_status.dart';
 import 'package:art_studio_app/models/user.dart';
+import 'package:art_studio_app/objects/payment_method_converter.dart';
+import 'package:art_studio_app/objects/payment_status_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'payments.g.dart';
@@ -10,8 +12,10 @@ part 'payments.g.dart';
 class PaymentAdd {
   final int userId;
   final int orderId;
+  @PaymentStatusConverter()
   final PaymentStatus status;
   final double fee;
+  @PaymentMethodConverter()
   final PaymentMethod paymentMethod;
 
   PaymentAdd({

@@ -1,5 +1,6 @@
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:art_studio_app/screens/detailed_workshop.dart';
+import 'package:art_studio_app/widgets/tile_card.dart';
 import 'package:flutter/material.dart';
 
 class WorkshopCard extends StatelessWidget {
@@ -106,24 +107,6 @@ class WorkshopCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class TileCard extends StatelessWidget {
-  const TileCard({super.key, required this.child, this.width});
-
-  final Widget child;
-  final double? width;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: Card(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        child: Padding(padding: const EdgeInsets.all(4.0), child: child),
       ),
     );
   }

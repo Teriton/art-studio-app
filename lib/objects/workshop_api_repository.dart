@@ -16,7 +16,9 @@ abstract class IWorkshopRepository {
   Future<bool> signUp(UserAdd user);
   Future<bool> isLoginAvailable(String login);
   Future<WorkshopAllRel?> getWorkshopAllRelById(int id);
-  Future<List<OrderSession>?> getOrders();
+  Future<List<OrderRels>?> getOrders();
+  Future<bool> orderSession(int id);
+  Future<bool> cancelOrder(int id);
 }
 
 class WorkshopAPIRepository implements IWorkshopRepository {
@@ -149,7 +151,7 @@ class WorkshopAPIRepository implements IWorkshopRepository {
   }
 
   @override
-  Future<List<OrderSession>?> getOrders() async {
+  Future<List<OrderRels>?> getOrders() async {
     Response response;
 
     try {
@@ -159,10 +161,44 @@ class WorkshopAPIRepository implements IWorkshopRepository {
       return null;
     }
 
-    List<OrderSession> orders = (response.data as List)
-        .map((item) => OrderSession.fromJson(item as Map<String, dynamic>))
+    List<OrderRels> orders = (response.data as List)
+        .map((item) => OrderRels.fromJson(item as Map<String, dynamic>))
         .toList();
 
     return orders;
+  }
+
+  @override
+  Future<bool> orderSession(int id) async {
+    Response response;
+    try {
+      response = await _dio.post("/bookSession?session_id=$id");
+    } catch (e) {
+      log(e.toString(), level: 900);
+      return false;
+    }
+
+    if (!response.data["success"]) {
+      return false;
+    }
+
+    return response.data["success"];
+  }
+
+  @override
+  Future<bool> cancelOrder(int id) async {
+    Response response;
+    try {
+      response = await _dio.delete("/order/$id");
+    } catch (e) {
+      log(e.toString(), level: 900);
+      return false;
+    }
+
+    if (!response.data["success"]) {
+      return false;
+    }
+
+    return response.data["success"];
   }
 }

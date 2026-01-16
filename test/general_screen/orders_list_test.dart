@@ -1,16 +1,29 @@
 import 'package:art_studio_app/models/orders.dart';
+import 'package:art_studio_app/models/payment_method.dart';
+import 'package:art_studio_app/models/payment_status.dart';
+import 'package:art_studio_app/models/payments.dart';
 import 'package:art_studio_app/models/schedule.dart';
 import 'package:art_studio_app/models/status.dart';
 import 'package:art_studio_app/models/workshop.dart';
+import 'package:art_studio_app/screens/general.dart';
+import 'package:art_studio_app/widgets/general/detailed_order.dart';
 import 'package:art_studio_app/widgets/general/orders_list.dart';
 import 'package:art_studio_app/widgets/order_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-List<OrderSession> getOrders() {
+List<OrderRels> getOrders() {
   final orders = [
-    OrderSession(
+    OrderRels(
+      payment: Payment(
+        id: 1,
+        userId: 1,
+        orderId: 1,
+        status: PaymentStatus.unpaid,
+        fee: 12.00,
+        paymentMethod: PaymentMethod.card,
+      ),
       session: ScheduleWorkshop(
         id: 1,
         workshopId: 1,
@@ -36,7 +49,15 @@ List<OrderSession> getOrders() {
       date: DateTime.now(),
       status: Status.active,
     ),
-    OrderSession(
+    OrderRels(
+      payment: Payment(
+        id: 1,
+        userId: 1,
+        orderId: 1,
+        status: PaymentStatus.unpaid,
+        fee: 12.00,
+        paymentMethod: PaymentMethod.card,
+      ),
       session: ScheduleWorkshop(
         id: 2,
         workshopId: 2,
@@ -92,6 +113,22 @@ void main() {
       );
 
       expect(find.byType(OrderCard), findsWidgets);
+    });
+    testWidgets("Open actions and detailes", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(home: GeneralScreen(initialPageIndex: 1)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final item1 = find.widgetWithText(
+        OrderCard,
+        "${OrderCard.textFields["orderInsription"]}${1}",
+      );
+      expect(item1, findsOneWidget);
+      await tester.tap(item1);
+      await tester.pumpAndSettle();
+      expect(find.byType(DetailedOrder), findsOneWidget);
     });
   });
 }

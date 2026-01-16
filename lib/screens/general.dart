@@ -23,7 +23,7 @@ class GeneralScreen extends ConsumerStatefulWidget {
 class _GeneralScreenState extends ConsumerState<GeneralScreen> {
   int _selectedPageIndex = 0;
   List<WorkshopRel>? _workshops;
-  List<OrderSession>? _orders;
+  List<OrderRels>? _orders;
 
   @override
   void initState() {

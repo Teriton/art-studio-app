@@ -90,5 +90,10 @@ void main() {
       final orders = await repository.getOrders();
       expect(orders != null, true);
     });
+    test("Order session", () async {
+      final repository = WorkshopRepositoryMock();
+      final result = await repository.orderSession(1);
+      expect(result, true);
+    });
   });
 }

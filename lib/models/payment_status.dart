@@ -1,6 +1,6 @@
 enum PaymentStatus {
-  paid("активный"),
-  unpaid("неактивный");
+  paid("Опалчен"),
+  unpaid("Не оплачен");
 
   const PaymentStatus(this.value);
   final String value;
