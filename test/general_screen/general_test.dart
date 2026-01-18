@@ -1,7 +1,9 @@
 import 'package:art_studio_app/screens/detailed_workshop.dart';
 import 'package:art_studio_app/screens/general.dart';
 import 'package:art_studio_app/screens/welcome.dart';
+import 'package:art_studio_app/widgets/general/detailed_order.dart';
 import 'package:art_studio_app/widgets/general/orders_list.dart';
+import 'package:art_studio_app/widgets/order_card.dart';
 import 'package:art_studio_app/widgets/workshop_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -100,6 +102,52 @@ void main() {
       await tester.tap(ordersButton);
       await tester.pumpAndSettle();
       expect(find.byType(OrdersList), findsOneWidget);
+    });
+    testWidgets("Detailed opens", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(home: GeneralScreen(initialPageIndex: 1)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final order = find.widgetWithText(
+        OrderCard,
+        "${OrderCard.textFields["orderInsription"]}2",
+      );
+      expect(order, findsOneWidget);
+      await tester.tap(order);
+      await tester.pumpAndSettle();
+      expect(find.byType(DetailedOrder), findsOneWidget);
+    });
+    testWidgets("Delete order", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(home: GeneralScreen(initialPageIndex: 1)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final order = find.widgetWithText(
+        OrderCard,
+        "${OrderCard.textFields["orderInsription"]}2",
+      );
+      expect(order, findsOneWidget);
+      await tester.tap(order);
+      await tester.pumpAndSettle();
+      expect(find.byType(DetailedOrder), findsOneWidget);
+      final cancelButton = find.widgetWithText(
+        ElevatedButton,
+        DetailedOrder.textFields['cancel']!,
+      );
+      expect(cancelButton, findsOneWidget);
+      await tester.tap(cancelButton);
+      await tester.pumpAndSettle();
+      expect(
+        find.widgetWithText(
+          OrderCard,
+          "${OrderCard.textFields["orderInsription"]}2",
+        ),
+        findsNothing,
+      );
     });
   });
 }

@@ -1,7 +1,6 @@
 import 'package:art_studio_app/models/schedule.dart';
-import 'package:art_studio_app/objects/workshop_api_repository.dart';
 import 'package:art_studio_app/providers/date_formater_provider.dart';
-import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
+import 'package:art_studio_app/providers/order_provider.dart';
 import 'package:art_studio_app/screens/general.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,24 +23,15 @@ class SessionCard extends ConsumerStatefulWidget {
 }
 
 class _SessionCardState extends ConsumerState<SessionCard> {
-  late final IWorkshopRepository _repo;
   bool _isLoading = false;
-
-  void _initRepo() async {
-    _repo = await ref.read(workshopRepositoryProvider.future);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initRepo();
-  }
 
   void _makeAnOrder(BuildContext alertContext) async {
     setState(() {
       _isLoading = true;
     });
-    final result = await _repo.orderSession(widget.session.id);
+    final result = await ref
+        .read(orderProvider.notifier)
+        .orderSession(widget.session.id);
     if (result && mounted && alertContext.mounted) {
       Navigator.of(alertContext).pop();
       Navigator.of(context).pushAndRemoveUntil(

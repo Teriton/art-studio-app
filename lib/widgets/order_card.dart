@@ -29,10 +29,10 @@ class OrderCard extends ConsumerWidget {
       useSafeArea: true,
       isScrollControlled: true,
       context: ctx,
-      builder: (ctx) {
+      builder: (ctxDetailed) {
         return Padding(
           padding: .all(8),
-          child: DetailedOrder(order: order),
+          child: DetailedOrder(order: order, context: ctx),
         );
       },
     );

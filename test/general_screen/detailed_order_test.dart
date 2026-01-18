@@ -94,7 +94,6 @@ void main() {
     });
     testWidgets("Buttons apear", (tester) async {
       final order = getOrders()[0];
-      final formater = DateFormater();
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(

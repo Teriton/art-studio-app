@@ -1,12 +1,12 @@
 import 'package:art_studio_app/models/orders.dart';
 import 'package:art_studio_app/objects/date_formater.dart';
-import 'package:art_studio_app/objects/workshop_api_repository.dart';
-import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
+import 'package:art_studio_app/providers/order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DetailedOrder extends ConsumerStatefulWidget {
-  const DetailedOrder({super.key, required this.order});
+  const DetailedOrder({super.key, required this.order, context})
+    : parentContext = context;
 
   static const textFields = <String, String>{
     "titleInscription": "Мастеркласс:",
@@ -22,8 +22,10 @@ class DetailedOrder extends ConsumerStatefulWidget {
     "paid": "оплачен",
     "pay": "Оплатить",
     "cancel": "Отменить",
+    "cancelError": "Ошибка при удалении заказа",
   };
   final OrderRels order;
+  final BuildContext? parentContext;
 
   @override
   ConsumerState<DetailedOrder> createState() => _DetailedOrderState();
@@ -32,16 +34,25 @@ class DetailedOrder extends ConsumerStatefulWidget {
 class _DetailedOrderState extends ConsumerState<DetailedOrder> {
   final _formater = DateFormater();
 
-  late final IWorkshopRepository _repo;
+  bool _isLoading = false;
 
-  void _initRepo() async {
-    _repo = await ref.read(workshopRepositoryProvider.future);
-  }
+  void _cancelOrder() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final result = await ref
+        .read(orderProvider.notifier)
+        .cancelOrder(widget.order.id);
 
-  @override
-  void initState() {
-    super.initState();
-    _initRepo();
+    if (mounted) Navigator.pop(context);
+    if (result == false &&
+        widget.parentContext != null &&
+        widget.parentContext!.mounted) {
+      ScaffoldMessenger.of(widget.parentContext!).clearSnackBars();
+      ScaffoldMessenger.of(widget.parentContext!).showSnackBar(
+        SnackBar(content: Text(DetailedOrder.textFields["cancelError"]!)),
+      );
+    }
   }
 
   @override
@@ -86,13 +97,15 @@ class _DetailedOrderState extends ConsumerState<DetailedOrder> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                 ),
-                onPressed: () {},
-                child: Text(
-                  DetailedOrder.textFields["cancel"]!,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSecondary,
-                  ),
-                ),
+                onPressed: _isLoading ? () {} : _cancelOrder,
+                child: _isLoading
+                    ? CircularProgressIndicator()
+                    : Text(
+                        DetailedOrder.textFields["cancel"]!,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        ),
+                      ),
               ),
             ],
           ),

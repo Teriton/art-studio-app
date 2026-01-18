@@ -27,6 +27,77 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
     ),
   ];
 
+  List<OrderRels> orders = [
+    OrderRels(
+      payment: Payment(
+        id: 1,
+        userId: 1,
+        orderId: 1,
+        status: PaymentStatus.unpaid,
+        fee: 12.00,
+        paymentMethod: PaymentMethod.card,
+      ),
+      session: ScheduleWorkshop(
+        id: 1,
+        workshopId: 1,
+        date: DateTime.now(),
+        location: "Лондон",
+        numberOfSeats: 100,
+        workshop: Workshop(
+          id: 1,
+          masterId: 1,
+          techniqueId: 12,
+          title: "Sosal???",
+          difficulty: "Sosalno",
+          duration: 12,
+          fee: 12.22,
+          status: Status.active,
+          description: "Sloshno strashno virubay",
+          image: "Delfin",
+        ),
+      ),
+      id: 2,
+      userId: 1,
+      scheduleId: 1,
+      date: DateTime.now(),
+      status: Status.active,
+    ),
+    OrderRels(
+      payment: Payment(
+        id: 1,
+        userId: 1,
+        orderId: 1,
+        status: PaymentStatus.unpaid,
+        fee: 12.00,
+        paymentMethod: PaymentMethod.card,
+      ),
+      session: ScheduleWorkshop(
+        id: 2,
+        workshopId: 2,
+        date: DateTime.now(),
+        location: "Piter",
+        numberOfSeats: 12,
+        workshop: Workshop(
+          id: 32,
+          masterId: 93,
+          techniqueId: 993,
+          title: "Sosal???",
+          difficulty: "Sosalno",
+          duration: 12,
+          fee: 12.22,
+          status: Status.active,
+          description: "Sloshno strashno virubay",
+          image: "Delfin",
+        ),
+      ),
+      id: 1,
+      userId: 1,
+      scheduleId: 1,
+      date: DateTime.now(),
+      status: Status.active,
+    ),
+  ];
+
   @override
   Future<WorkshopMaster?> getClosestWorkshop() {
     return Future(
@@ -265,87 +336,57 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
 
   @override
   Future<List<OrderRels>?> getOrders() {
-    return Future(
-      () => [
-        OrderRels(
-          payment: Payment(
-            id: 1,
-            userId: 1,
-            orderId: 1,
-            status: PaymentStatus.unpaid,
-            fee: 12.00,
-            paymentMethod: PaymentMethod.card,
-          ),
-          session: ScheduleWorkshop(
-            id: 1,
-            workshopId: 1,
-            date: DateTime.now(),
-            location: "Лондон",
-            numberOfSeats: 100,
-            workshop: Workshop(
-              id: 1,
-              masterId: 1,
-              techniqueId: 12,
-              title: "Sosal???",
-              difficulty: "Sosalno",
-              duration: 12,
-              fee: 12.22,
-              status: Status.active,
-              description: "Sloshno strashno virubay",
-              image: "Delfin",
-            ),
-          ),
-          id: 2,
-          userId: 1,
-          scheduleId: 1,
-          date: DateTime.now(),
-          status: Status.active,
-        ),
-        OrderRels(
-          payment: Payment(
-            id: 1,
-            userId: 1,
-            orderId: 1,
-            status: PaymentStatus.unpaid,
-            fee: 12.00,
-            paymentMethod: PaymentMethod.card,
-          ),
-          session: ScheduleWorkshop(
-            id: 2,
-            workshopId: 2,
-            date: DateTime.now(),
-            location: "Piter",
-            numberOfSeats: 12,
-            workshop: Workshop(
-              id: 32,
-              masterId: 93,
-              techniqueId: 993,
-              title: "Sosal???",
-              difficulty: "Sosalno",
-              duration: 12,
-              fee: 12.22,
-              status: Status.active,
-              description: "Sloshno strashno virubay",
-              image: "Delfin",
-            ),
-          ),
-          id: 1,
-          userId: 1,
-          scheduleId: 1,
-          date: DateTime.now(),
-          status: Status.active,
-        ),
-      ],
-    );
+    return Future(() => orders);
   }
 
   @override
   Future<bool> orderSession(int id) {
+    orders.add(
+      OrderRels(
+        payment: Payment(
+          id: 1,
+          userId: 1,
+          orderId: 1,
+          status: PaymentStatus.unpaid,
+          fee: 12.00,
+          paymentMethod: PaymentMethod.card,
+        ),
+        session: ScheduleWorkshop(
+          id: 1,
+          workshopId: 1,
+          date: DateTime.now(),
+          location: "Лондон",
+          numberOfSeats: 100,
+          workshop: Workshop(
+            id: 1,
+            masterId: 1,
+            techniqueId: 12,
+            title: "Sosal???",
+            difficulty: "Sosalno",
+            duration: 12,
+            fee: 12.22,
+            status: Status.active,
+            description: "Sloshno strashno virubay",
+            image: "Delfin",
+          ),
+        ),
+        id: id,
+        userId: 1,
+        scheduleId: 1,
+        date: DateTime.now(),
+        status: Status.active,
+      ),
+    );
     return Future(() => true);
   }
 
   @override
   Future<bool> cancelOrder(int id) {
-    return Future(() => true);
+    final orderToDelete = orders.where((element) => element.id == id).toList();
+    if (orderToDelete.isNotEmpty) {
+      orders.remove(orderToDelete.first);
+      return Future(() => true);
+    }
+    return Future(() => false);
   }
 }

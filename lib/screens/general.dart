@@ -1,5 +1,5 @@
-import 'package:art_studio_app/models/orders.dart';
 import 'package:art_studio_app/models/workshop.dart';
+import 'package:art_studio_app/providers/order_provider.dart';
 import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
 import 'package:art_studio_app/screens/welcome.dart';
 import 'package:art_studio_app/widgets/general/orders_list.dart';
@@ -23,7 +23,6 @@ class GeneralScreen extends ConsumerStatefulWidget {
 class _GeneralScreenState extends ConsumerState<GeneralScreen> {
   int _selectedPageIndex = 0;
   List<WorkshopRel>? _workshops;
-  List<OrderRels>? _orders;
 
   @override
   void initState() {
@@ -39,14 +38,6 @@ class _GeneralScreenState extends ConsumerState<GeneralScreen> {
     });
   }
 
-  void _initOrders() async {
-    final repo = await ref.read(workshopRepositoryProvider.future);
-    final freshOrders = await repo.getOrders();
-    setState(() {
-      _orders = freshOrders;
-    });
-  }
-
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
@@ -55,6 +46,7 @@ class _GeneralScreenState extends ConsumerState<GeneralScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var orders = ref.watch(orderProvider);
     Widget content = Text("");
     String activePageTitle = '';
     switch (_selectedPageIndex) {
@@ -77,20 +69,15 @@ class _GeneralScreenState extends ConsumerState<GeneralScreen> {
         activePageTitle = GeneralScreen.textFields["workshops"]!;
         break;
       case 1:
-        if (_orders == null) {
-          content = Center(child: CircularProgressIndicator());
-          _initOrders();
-          break;
-        }
         content = RefreshIndicator(
-          onRefresh: () async {
-            setState(() {
-              _orders = null;
-            });
-            _initOrders();
-            return;
-          },
-          child: OrdersList(orders: _orders!),
+          onRefresh: () async => ref.read(orderProvider.notifier).refresh(),
+          child: orders.when(
+            data: (orders) => OrdersList(orders: orders),
+            error: (err, _) => ListView(
+              children: [Center(heightFactor: 30, child: Text(err.toString()))],
+            ),
+            loading: () => Center(child: CircularProgressIndicator()),
+          ),
         );
         activePageTitle = GeneralScreen.textFields["orders"]!;
         break;
