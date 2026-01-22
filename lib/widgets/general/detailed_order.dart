@@ -1,6 +1,9 @@
 import 'package:art_studio_app/models/orders.dart';
+import 'package:art_studio_app/models/payment_method.dart';
+import 'package:art_studio_app/models/payment_status.dart';
 import 'package:art_studio_app/objects/date_formater.dart';
 import 'package:art_studio_app/providers/order_provider.dart';
+import 'package:art_studio_app/screens/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -89,24 +92,33 @@ class _DetailedOrderState extends ConsumerState<DetailedOrder> {
           Row(
             mainAxisAlignment: .spaceAround,
             children: [
-              ElevatedButton(
-                onPressed: () {},
-                child: Text(DetailedOrder.textFields["pay"]!),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                ),
-                onPressed: _isLoading ? () {} : _cancelOrder,
-                child: _isLoading
-                    ? CircularProgressIndicator()
-                    : Text(
-                        DetailedOrder.textFields["cancel"]!,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
+              if (widget.order.payment.status != PaymentStatus.paid)
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => PaymentScreen(order: widget.order),
                       ),
-              ),
+                    );
+                  },
+                  child: Text(DetailedOrder.textFields["pay"]!),
+                ),
+              if (widget.order.payment.status != PaymentStatus.paid ||
+                  widget.order.payment.paymentMethod != PaymentMethod.card)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                  ),
+                  onPressed: _isLoading ? () {} : _cancelOrder,
+                  child: _isLoading
+                      ? CircularProgressIndicator()
+                      : Text(
+                          DetailedOrder.textFields["cancel"]!,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                          ),
+                        ),
+                ),
             ],
           ),
           SizedBox(height: 20),

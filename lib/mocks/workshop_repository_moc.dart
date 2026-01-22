@@ -389,4 +389,13 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
     }
     return Future(() => false);
   }
+
+  @override
+  Future<bool> payForOrder(int id, PaymentMethod paymentMethod) {
+    final orderToPay = orders.where((element) => element.id == id).toList();
+    if (orderToPay.isNotEmpty) {
+      return Future(() => true);
+    }
+    return Future(() => false);
+  }
 }

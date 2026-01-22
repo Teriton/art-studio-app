@@ -1,5 +1,6 @@
 import 'package:art_studio_app/screens/detailed_workshop.dart';
 import 'package:art_studio_app/screens/general.dart';
+import 'package:art_studio_app/screens/payment.dart';
 import 'package:art_studio_app/screens/welcome.dart';
 import 'package:art_studio_app/widgets/general/detailed_order.dart';
 import 'package:art_studio_app/widgets/general/orders_list.dart';
@@ -148,6 +149,31 @@ void main() {
         ),
         findsNothing,
       );
+    });
+    testWidgets("Payment opens", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(home: GeneralScreen(initialPageIndex: 1)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final order = find.widgetWithText(
+        OrderCard,
+        "${OrderCard.textFields["orderInsription"]}2",
+      );
+      expect(order, findsOneWidget);
+      await tester.tap(order);
+      await tester.pumpAndSettle();
+      expect(find.byType(DetailedOrder), findsOneWidget);
+
+      final paymentButton = find.widgetWithText(
+        ElevatedButton,
+        DetailedOrder.textFields["pay"]!,
+      );
+      expect(paymentButton, findsOneWidget);
+      await tester.tap(paymentButton);
+      await tester.pumpAndSettle();
+      expect(find.byType(PaymentScreen), findsOneWidget);
     });
   });
 }

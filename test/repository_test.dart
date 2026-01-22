@@ -1,4 +1,5 @@
 import 'package:art_studio_app/mocks/workshop_repository_moc.dart';
+import 'package:art_studio_app/models/payment_method.dart';
 import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -93,6 +94,11 @@ void main() {
     test("Order session", () async {
       final repository = WorkshopRepositoryMock();
       final result = await repository.orderSession(1);
+      expect(result, true);
+    });
+    test("Pay for order", () async {
+      final repository = WorkshopRepositoryMock();
+      final result = await repository.payForOrder(1, PaymentMethod.card);
       expect(result, true);
     });
   });

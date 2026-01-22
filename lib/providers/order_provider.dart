@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:art_studio_app/models/orders.dart';
+import 'package:art_studio_app/models/payment_method.dart';
 import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,5 +50,11 @@ class OrderNotifier extends AutoDisposeAsyncNotifier<List<OrderRels>> {
       return;
     }
     state = AsyncValue.error("Не удалось получить заказы", StackTrace.current);
+  }
+
+  Future<bool> payForOrder(int id, PaymentMethod paymentMethod) async {
+    final repo = await ref.read(workshopRepositoryProvider.future);
+    final result = await repo.payForOrder(id, paymentMethod);
+    return await _refreshIfResultTrueAndReturnResult(result);
   }
 }

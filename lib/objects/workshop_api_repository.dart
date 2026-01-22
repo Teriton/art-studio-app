@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:art_studio_app/models/orders.dart';
+import 'package:art_studio_app/models/payment_method.dart';
 import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -19,6 +20,7 @@ abstract class IWorkshopRepository {
   Future<List<OrderRels>?> getOrders();
   Future<bool> orderSession(int id);
   Future<bool> cancelOrder(int id);
+  Future<bool> payForOrder(int id, PaymentMethod paymentMethod);
 }
 
 class WorkshopAPIRepository implements IWorkshopRepository {
@@ -200,5 +202,20 @@ class WorkshopAPIRepository implements IWorkshopRepository {
     }
 
     return response.data["success"];
+  }
+
+  @override
+  Future<bool> payForOrder(int id, PaymentMethod paymentMethod) async {
+    Response response;
+    try {
+      response = await _dio.post(
+        "/order/$id",
+        data: {'payment_method': paymentMethod.value},
+      );
+    } catch (e) {
+      log(e.toString(), level: 900);
+      return false;
+    }
+    return response.statusCode! < 400;
   }
 }
