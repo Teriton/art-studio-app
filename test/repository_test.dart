@@ -101,5 +101,10 @@ void main() {
       final result = await repository.payForOrder(1, PaymentMethod.card);
       expect(result, true);
     });
+    test("Info user", () async {
+      final repository = WorkshopRepositoryMock();
+      final result = await repository.info();
+      expect(result != null, true);
+    });
   });
 }

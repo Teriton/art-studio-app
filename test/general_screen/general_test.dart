@@ -4,6 +4,7 @@ import 'package:art_studio_app/screens/payment.dart';
 import 'package:art_studio_app/screens/welcome.dart';
 import 'package:art_studio_app/widgets/general/detailed_order.dart';
 import 'package:art_studio_app/widgets/general/orders_list.dart';
+import 'package:art_studio_app/widgets/general/profile_page.dart';
 import 'package:art_studio_app/widgets/order_card.dart';
 import 'package:art_studio_app/widgets/workshop_card.dart';
 import 'package:flutter/material.dart';
@@ -174,6 +175,20 @@ void main() {
       await tester.tap(paymentButton);
       await tester.pumpAndSettle();
       expect(find.byType(PaymentScreen), findsOneWidget);
+    });
+  });
+
+  group("Profile test", () {
+    testWidgets("Profile opens", (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(child: MaterialApp(home: GeneralScreen())),
+      );
+      await tester.pumpAndSettle();
+      final ordersButton = find.byIcon(Icons.account_box);
+      expect(ordersButton, findsOneWidget);
+      await tester.tap(ordersButton);
+      await tester.pumpAndSettle();
+      expect(find.byType(ProfilePage), findsOneWidget);
     });
   });
 }

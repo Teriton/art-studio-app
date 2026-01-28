@@ -1,5 +1,3 @@
-import 'package:art_studio_app/main.dart';
-import 'package:art_studio_app/screens/welcome.dart';
 import 'package:art_studio_app/widgets/payment/cash_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

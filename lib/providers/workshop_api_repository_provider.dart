@@ -7,7 +7,7 @@ final workshopRepositoryProvider =
     FutureProvider.autoDispose<IWorkshopRepository>((ref) async {
       if (AppConfig.isDevelopment || AppConfig.isProduction) {
         final repo = WorkshopAPIRepository(
-          baseUrl: "http://192.168.100.9/api/",
+          baseUrl: "http://192.168.100.10/api/",
         );
         await repo.init();
         return repo;

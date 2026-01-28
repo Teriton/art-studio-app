@@ -398,4 +398,18 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
     }
     return Future(() => false);
   }
+
+  @override
+  Future<User?> info() async {
+    return User(
+      id: 1,
+      firstName: "Vitaly",
+      lastName: "Shpack",
+      email: "sosal@da.hui",
+      phoneNumber: "+1234",
+      login: "pidr",
+      psw: "123456",
+      admin: false,
+    );
+  }
 }

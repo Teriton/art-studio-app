@@ -1,8 +1,11 @@
+import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:art_studio_app/providers/order_provider.dart';
+import 'package:art_studio_app/providers/user_provider.dart';
 import 'package:art_studio_app/providers/workshop_api_repository_provider.dart';
 import 'package:art_studio_app/screens/welcome.dart';
 import 'package:art_studio_app/widgets/general/orders_list.dart';
+import 'package:art_studio_app/widgets/general/profile_page.dart';
 import 'package:art_studio_app/widgets/general/workshop_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,6 +50,7 @@ class _GeneralScreenState extends ConsumerState<GeneralScreen> {
   @override
   Widget build(BuildContext context) {
     var orders = ref.watch(orderProvider);
+    var user = ref.watch(userProvider);
     Widget content = Text("");
     String activePageTitle = '';
     switch (_selectedPageIndex) {
@@ -82,7 +86,16 @@ class _GeneralScreenState extends ConsumerState<GeneralScreen> {
         activePageTitle = GeneralScreen.textFields["orders"]!;
         break;
       case 2:
-        //content = Center(child: CircularProgressIndicator());
+        content = RefreshIndicator(
+          onRefresh: () async => ref.read(userProvider.notifier).refresh(),
+          child: user.when(
+            data: (user) => ListView(children: [ProfilePage(user: user)]),
+            error: (err, _) => ListView(
+              children: [Center(heightFactor: 30, child: Text(err.toString()))],
+            ),
+            loading: () => Center(child: CircularProgressIndicator()),
+          ),
+        );
         activePageTitle = GeneralScreen.textFields["profile"]!;
         break;
     }
