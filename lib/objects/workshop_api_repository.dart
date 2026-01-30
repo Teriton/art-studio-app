@@ -22,6 +22,7 @@ abstract class IWorkshopRepository {
   Future<bool> cancelOrder(int id);
   Future<bool> payForOrder(int id, PaymentMethod paymentMethod);
   Future<User?> info();
+  Future<bool> updateInfo(UserAdd user);
 }
 
 class WorkshopAPIRepository implements IWorkshopRepository {
@@ -233,5 +234,17 @@ class WorkshopAPIRepository implements IWorkshopRepository {
 
     User orders = User.fromJson(response.data);
     return orders;
+  }
+
+  @override
+  Future<bool> updateInfo(UserAdd user) async {
+    Response response;
+    try {
+      response = await _dio.put("/user/updateInfo", data: user.toJson());
+    } catch (e) {
+      log(e.toString(), level: 900);
+      return false;
+    }
+    return response.statusCode! < 400;
   }
 }

@@ -4,6 +4,8 @@ import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'general_screen/profile_test.dart';
+
 void main() {
   group("Api repository tests", () {
     test("Get workshops", () async {
@@ -105,6 +107,11 @@ void main() {
       final repository = WorkshopRepositoryMock();
       final result = await repository.info();
       expect(result != null, true);
+    });
+    test("UpdateInfo user", () async {
+      final repository = WorkshopRepositoryMock();
+      final result = await repository.updateInfo(getUser());
+      expect(result, true);
     });
   });
 }

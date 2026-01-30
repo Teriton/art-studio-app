@@ -41,4 +41,19 @@ class UserNotifier extends AutoDisposeAsyncNotifier<User> {
       StackTrace.current,
     );
   }
+
+  Future<bool> updateInfo(UserAdd user) async {
+    state = const AsyncValue.loading();
+    final repo = await ref.read(workshopRepositoryProvider.future);
+    final result = await repo.updateInfo(user);
+    return await _refreshIfResultTrueAndReturnResult(result);
+  }
+
+  Future<bool> _refreshIfResultTrueAndReturnResult(bool result) async {
+    if (result == true) {
+      await refresh();
+      return true;
+    }
+    return false;
+  }
 }

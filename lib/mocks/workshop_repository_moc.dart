@@ -406,10 +406,15 @@ class WorkshopRepositoryMock implements IWorkshopRepository {
       firstName: "Vitaly",
       lastName: "Shpack",
       email: "sosal@da.hui",
-      phoneNumber: "+1234",
+      phoneNumber: "+1234567890",
       login: "pidr",
       psw: "123456",
       admin: false,
     );
+  }
+
+  @override
+  Future<bool> updateInfo(UserAdd user) async {
+    return true;
   }
 }

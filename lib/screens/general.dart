@@ -1,4 +1,3 @@
-import 'package:art_studio_app/models/user.dart';
 import 'package:art_studio_app/models/workshop.dart';
 import 'package:art_studio_app/providers/order_provider.dart';
 import 'package:art_studio_app/providers/user_provider.dart';
