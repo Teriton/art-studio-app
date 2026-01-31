@@ -12,7 +12,7 @@ class ProfilePage extends ConsumerStatefulWidget {
     "firstName": "Имя",
     "lastName": "Фамилия",
     "emptyError": "Поле должно быть заполнено",
-    "login": " Лгин:",
+    "login": " Логин:",
     "email": "Email:",
     "emailError": "Невенрно введен email",
     "phone": "Номер телефона:",
@@ -90,16 +90,29 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     Widget content = Column(
+      crossAxisAlignment: .start,
       children: [
         Container(
           decoration: BoxDecoration(),
           child: Row(
+            mainAxisSize: .max,
+            mainAxisAlignment: .spaceAround,
             children: [
-              CircleAvatar(),
+              CircleAvatar(
+                radius: 40,
+                child: Text(
+                  style: Theme.of(context).textTheme.titleLarge,
+                  "${widget.user.firstName[0]}${widget.user.lastName[0]}",
+                ),
+              ),
               Column(
-                mainAxisSize: .min,
+                crossAxisAlignment: .start,
+                mainAxisAlignment: .spaceBetween,
                 children: [
-                  Text("${widget.user.firstName} ${widget.user.lastName}"),
+                  Text(
+                    style: Theme.of(context).textTheme.titleLarge,
+                    "${widget.user.firstName} ${widget.user.lastName}",
+                  ),
                   Text(
                     "${ProfilePage.textFields["login"]!} ${widget.user.login}",
                   ),
@@ -108,17 +121,35 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             ],
           ),
         ),
-        Text(ProfilePage.textFields["email"]!),
-        Text(widget.user.email),
-        Text(ProfilePage.textFields["phone"]!),
-        Text(widget.user.phoneNumber),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _isEdit = true;
-            });
-          },
-          child: Text(ProfilePage.textFields["edit"]!),
+        SizedBox(height: 20),
+        Text(
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium!.copyWith(fontWeight: .w200),
+          ProfilePage.textFields["email"]!,
+        ),
+        Text(style: Theme.of(context).textTheme.bodyLarge, widget.user.email),
+        SizedBox(height: 20),
+        Text(
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium!.copyWith(fontWeight: .w200),
+          ProfilePage.textFields["phone"]!,
+        ),
+        Text(
+          style: Theme.of(context).textTheme.bodyLarge,
+          widget.user.phoneNumber,
+        ),
+        SizedBox(height: 20),
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _isEdit = true;
+              });
+            },
+            child: Text(ProfilePage.textFields["edit"]!),
+          ),
         ),
       ],
     );
@@ -150,7 +181,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               textInputAction: TextInputAction.next,
               initialValue: _lastName,
               decoration: InputDecoration(
-                label: Text(ProfilePage.textFields["firstName"]!),
+                label: Text(ProfilePage.textFields["lastName"]!),
               ),
               keyboardType: TextInputType.name,
               enableSuggestions: false,
@@ -161,7 +192,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 return null;
               },
               onSaved: (newValue) {
-                _firstName = newValue!;
+                _lastName = newValue!;
               },
             ),
 
@@ -206,7 +237,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 _email = newValue!;
               },
             ),
+            SizedBox(height: 20),
             Row(
+              mainAxisAlignment: .spaceAround,
               children: [
                 TextButton(
                   onPressed: _isLoading
